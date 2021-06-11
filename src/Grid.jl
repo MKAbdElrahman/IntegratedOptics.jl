@@ -23,12 +23,7 @@ Base.size(g::Grid) =  g.size
 """
     Grid(; extent ,  spacing)
 
-Grid Constructor
-
-# Examples
-```jldoctest
-julia> Grid(extent = 1.5 ,  spacing = 0.1)
-
+Grid constructor.
 ```
 """	
 function  Grid(; extent ,  spacing)
