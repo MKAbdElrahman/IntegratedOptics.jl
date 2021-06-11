@@ -3,6 +3,11 @@ uuid = "c28080c6-85c9-4c53-b771-a8cba179d15c"
 authors = ["Mohamed Kamal AbdElrahman"]
 version = "0.1.0"
 
+[deps]
+Gnuplot = "dc211083-a33a-5b79-959f-2ff34033469d"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
 [compat]
 julia = "1.6"
 
