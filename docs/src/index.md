@@ -10,7 +10,8 @@ Documentation for [Photon](https://github.com/MKAbdElrahman/Photon.jl).
 ## Getting Started: Installation And First Steps
 To install the package, use the following command inside the Julia REPL:
 ```julia
-Pkg.add("Photon")
+using Pkg
+Pkg.add("https://github.com/MKAbdElrahman/Photon.jl")
 ```
 
 To load the package, use the command:
