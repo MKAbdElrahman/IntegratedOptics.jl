@@ -24,7 +24,6 @@ Base.size(g::Grid) =  g.size
     Grid(; extent ,  spacing)
 
 Grid constructor.
-```
 """	
 function  Grid(; extent ,  spacing)
 		 length(extent) == length(spacing) ||
