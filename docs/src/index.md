@@ -2,7 +2,7 @@
 CurrentModule = Photon
 ```
 
-# Photon.jl
+# Photon
 
 Documentation for [Photon](https://github.com/MKAbdElrahman/Photon.jl).
 
