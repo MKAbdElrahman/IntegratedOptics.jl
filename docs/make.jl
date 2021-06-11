@@ -18,6 +18,6 @@ makedocs(;
     ],
 )
 
-deploydocs(;
+deploydocs(;devbranch = "main",
     repo="github.com/MKAbdElrahman/Photon.jl",
 )
