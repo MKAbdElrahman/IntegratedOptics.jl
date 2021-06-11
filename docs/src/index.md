@@ -21,7 +21,7 @@ using Photon
 ```
 ## Tutorials
 
-he following tutorials will introduce you to the functionality of
+The following tutorials will introduce you to the functionality of
 Photon.jl.
 
 ```@contents
