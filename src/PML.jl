@@ -7,7 +7,6 @@ end
 
 """
 	 PML(g::Grid{ND})
-PML constructor.
 Returns an object to be used later as functor that can be used to customize the PML length, sides and directions.	
 
 """	
