@@ -2,6 +2,7 @@ module Photon
 
 using  LinearAlgebra
 using  SparseArrays
+using  Arpack 
 using  Gnuplot
 
 

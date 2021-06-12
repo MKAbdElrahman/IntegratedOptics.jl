@@ -1,5 +1,5 @@
 
-export Grid,  x⃗e ,  x⃗c , dimension , extent , spacing , ncells , range
+export Grid,  x⃗e ,  x⃗c , dimension , extent , spacing , ncells , range ,coord2index
 
 import Base: size , Generator , CartesianIndices , range
 
@@ -82,7 +82,14 @@ function x⃗e(g::Grid , Ind::CartesianIndex)
 	δ =  spacing(g)
 	Ind.I .* δ  
 end	
-	
+"""
+	coord2index(g::Grid{2},p)
+returns the integer indices for a coordinate.
+"""	
+function coord2index(g::Grid{2},p)
+   round.(Int,p ./ spacing(g)) 
+end
+
 function Base.show(io::IO, g::Grid)
         print(io, "dimension:  $(dimension(g))\n",
 			      "size     :  ",size(g), '\n',

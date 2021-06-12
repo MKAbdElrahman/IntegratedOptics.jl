@@ -1,10 +1,10 @@
 
 export  one_in_one_out_device! , updateRectangularRegion! 
 
-function one_in_one_out_device!(device::Device{2},d,wd,hd)
+function one_in_one_out_device!(device::Device{2},ϵᵣ , d,wd,hd)
     x0 , y0 = 0.5 .* device.grid.extent
-    updateRectangularRegion!(device, 1.5 , ((-Inf,y0 - d/2) , (Inf, y0 + d/2)))
-    updateRectangularRegion!(device, 1.25 ,((-hd/2+x0,-wd/2+y0) , (hd/2+x0, wd/2+y0)))
+    updateRectangularRegion!(device, ϵᵣ, ((-Inf,y0 - d/2) , (Inf, y0 + d/2)))
+    updateRectangularRegion!(device,ϵᵣ,((-hd/2+x0,-wd/2+y0) , (hd/2+x0, wd/2+y0)))
 end
     
 
