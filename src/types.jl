@@ -25,4 +25,5 @@ const LOW = Low()
 
 
 const Float = typeof(0.0)
+const CFloat = Complex{Float}
 const NT = NTuple
