@@ -14,6 +14,11 @@ function  PML(g::Grid{ND}) where ND
 			s = ones(Complex{Float},size(g))
 			return PML(g,s)
 end	
+	
+function Base.show(io::IO, g::PML{ND}) where ND
+        print(io, "PML with dimension:  $(ND)\n")
+end
+	
 _s(d::Real,L::Real;m::Real=3.5,s_min::Real= -1.0) = im*(s_min) * Complex((d/L))^m	
 
 s(::High,x,d,l)::Complex{Float} = ( _s(x - (l - d)  ,  d))
@@ -21,31 +26,39 @@ s(::Low,x,d,l)::Complex{Float}  = (_s(-x + d , d))
 
 
 	
-function (pml::PML{ND})(dir::Direction,side::Side, ncells = 30) where ND		
+function (pml::PML{ND})(dir::Direction{D},side::Low, ncells = 10) where {ND,D}		
 g = pml._grid 
-I =  CartesianIndices(g,dir,side,ncells) 
-r  = x⃗e(g, I)
+I =  CartesianIndices(g,dir,1:ncells) 
+r  = Coordinates(g,p̂, I)
 thickness  = ncells * spacing(g,dir)
 l =  extent(g,dir)		
-ind = indx(dir)		
-pml._s[I] .+= (s(side,x[ind],thickness,l) for x in r)
+pml._s[I] .+= (s(side,x[D],thickness,l) for x in r)
 return pml._s
 end
 	
-		
-function (pml::PML{ND})(dir::Direction, ncells = 30) where ND
+function (pml::PML{ND})(dir::Direction{D},side::High, ncells::Int = 10) where {ND,D}		
+g = pml._grid 
+I =  CartesianIndices(g,dir,(size(g,dir)-ncells):size(g,dir)) 
+r  = Coordinates(g,p̂, I)
+thickness  = ncells * spacing(g,dir)
+l =  extent(g,dir)		
+pml._s[I] .+= (s(side,x[D],thickness,l) for x in r)
+return pml._s
+end
+			
+function (pml::PML{ND})(dir::Direction, ncells::Int = 10) where ND
 	pml(dir,LOW,ncells)
 	pml(dir,HIGH,ncells)
 end
 	
-function (pml::PML{1})(ncells::Int = 30) 
+function (pml::PML{1})(ncells::Int = 10) 
 	pml(x̂,ncells)
 end
-function (pml::PML{2})(ncells::Int = 30)
+function (pml::PML{2})(ncells::Int = 10)
 	pml(x̂,ncells)	
 	pml(ŷ,ncells)
 end	
-function (pml::PML{3})(ncells::Int = 30)
+function (pml::PML{3})(ncells::Int = 10)
 	pml(x̂,ncells)	
 	pml(ŷ,ncells)	
 	pml(ẑ,ncells)
