@@ -10,6 +10,7 @@ using  Gnuplot
 include("types.jl")
 include("Grid.jl")
 include("PML.jl")
+include("SFRegion.jl")
 include("BC.jl")
 include("∂.jl")
 include("Devices/Device.jl")

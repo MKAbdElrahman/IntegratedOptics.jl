@@ -23,7 +23,7 @@ end
 
 
 
-function update!(m::Array,grid::Grid,maskF::Function,valueF::Function,gridtype::GridType{T} = p̂) where T
+function update!(m::AbstractArray,grid::Grid,maskF::Function,valueF::Function,gridtype::GridType{T} = p̂) where T
 	mask = maskF.(Coordinates(grid,gridtype))
 	vals = valueF.(Coordinates(grid,gridtype));
 	m[mask] = vals[mask];
