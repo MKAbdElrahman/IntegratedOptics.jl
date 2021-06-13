@@ -1,15 +1,13 @@
 
-export Grid, Coordinate  , dimension , extent , spacing , ncells , range ,coord2index
-
-import Base: size , Generator , CartesianIndices , range
+export Grid, Coordinate ,Coordinates , dimension , extent , spacing , ncells , range 
 
 
 
-	struct Grid{N}
+struct Grid{N}
     extent::NT{N,Float}
     spacing::NT{N,Float}
 	size::NT{N,Int}	
-	end
+end
 	
 function  Grid(; extent ,  spacing)
 		 length(extent) == length(spacing) ||
@@ -70,9 +68,9 @@ end
 	
 	
 """
-	x⃗c(g::Grid , Ind::CartesianIndex)
+	Coordinate(g::Grid ,::GridType{:Dual},Ind::CartesianIndex)
 
-Returns the equivalent primal coordinate of of a `CartesianIndex`.
+Returns the equivalent dual coordinate of of a `CartesianIndex`.
 	
 The function doesnot chack for being inside the grid.	
 """
@@ -81,9 +79,9 @@ function Coordinate(g::Grid ,::GridType{:Dual},Ind::CartesianIndex)
 	Ind.I .* δ  .+  0.5 .* spacing(g) 
 end	
 """
-	x⃗c(g::Grid , Ind::CartesianIndex)
+	Coordinate(g::Grid , ::GridType{:Primal}, Ind::CartesianIndex)
 
-Returns the equivalent dual coordinate of of a `CartesianIndex`.
+Returns the equivalent primal coordinate of of a `CartesianIndex`.
 	
 The function doesnot chack for being inside the grid.	
 """
