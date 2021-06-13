@@ -23,9 +23,9 @@ end
 
 
 
-function update!(m::Array,grid::Grid,maskF::Function,valueF::Function)
-	mask = maskF.(x⃗c(grid))
-	vals = valueF.(x⃗c(grid));
+function update!(m::Array,grid::Grid,maskF::Function,valueF::Function,gridtype::GridType{T} = p̂) where T
+	mask = maskF.(Coordinates(grid,gridtype))
+	vals = valueF.(Coordinates(grid,gridtype));
 	m[mask] = vals[mask];
 	return nothing
 end		

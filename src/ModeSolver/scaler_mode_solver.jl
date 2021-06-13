@@ -6,9 +6,10 @@ solves the eigenvalue problem across the line noraml to `direction` and centered
 
 The method was created to be used for defining mode sources for 2D problems.
 """
-function eigensolve(dev::Device{2}; direction::Direction,center::Tuple , k::Real)
+function eigensolve(dev::Device{2}; direction::Direction{D},center::Tuple , k::Real) where D
     ϵᵣ11 = dev.ϵᵣ11
-    ix, iy = coord2index(dev.grid, center) 
+    i  = CartesianIndex(dev.grid, p̂ , center) ; 
+    ix = i[1]; iy = i[2];
 
     if direction == x̂ 
         Ny = size(dev.grid, ŷ)

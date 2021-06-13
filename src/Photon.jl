@@ -14,6 +14,7 @@ include("BC.jl")
 include("∂.jl")
 include("Devices/Device.jl")
 include("Devices/devices_2D.jl")
+include("ModeSolver/scaler_mode_solver.jl")
 include("sim_objects.jl")
 include("plot.jl")
 

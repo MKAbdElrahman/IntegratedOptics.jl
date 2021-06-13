@@ -2,19 +2,17 @@ export x̂ , ŷ , ẑ
 export HIGH , LOW
 
 
-abstract type  Direction end
+struct Direction{T} end	
+const x̂ = Direction{1}()
+const ŷ = Direction{2}()	
+const ẑ = Direction{3}()	
 	
-struct X̂ <: Direction end
-struct Ŷ <: Direction end
-struct Ẑ <: Direction end
+	
+struct GridType{T} end	
+const p̂ = GridType{:Primal}()
+const d̂ = GridType{:Dual}()	
 
-const x̂ = X̂()
-const ŷ = Ŷ()
-const ẑ = Ẑ()
 
-indx(::X̂) = 1
-indx(::Ŷ) = 2
-indx(::Ẑ) = 3
 
 abstract type Side end
 struct High <: Side end

@@ -33,18 +33,18 @@ function  ∂(::Periodic,N::Int,dx::Real)
  end
 
 
- function ∂(bc::BCType,dir::Direction,g::Grid{D}) where D
-    if Int(dir) > D return (spzeros(ncells(g),ncells(g)) , spzeros(ncells(g),ncells(g))) end
-    dw = g.spacing[Int(dir)];
-    nw = size(g, Int(dir));
+ function ∂(bc::BCType,dir::Direction{NDir},g::Grid{NDim}) where {NDim,NDir}
+    if NDir > NDim return (spzeros(ncells(g),ncells(g)) , spzeros(ncells(g),ncells(g))) end
+    dw = spacing(g,dir);
+    nw = size(g,dir);
     ∂w = ∂(bc,nw,dw);
     return kron(∂w[1], dir, g) , kron(∂w[2], dir, g)
  end
 
- function ∂(bc::Bloch,dir::Direction,g::Grid{D},e⁻ⁱᵏᴸ::Number = 1.0) where D
-   if Int(dir) > D return (spzeros(ncells(g),ncells(g)) , spzeros(ncells(g),ncells(g))) end
-   dw = g.spacing[Int(dir)];
-   nw = size(g, Int(dir));
+ function ∂(bc::Bloch,dir::Direction{NDir},g::Grid{NDim},e⁻ⁱᵏᴸ::Number = 1.0) where {NDim,NDir}
+   if NDir > NDim return (spzeros(ncells(g),ncells(g)) , spzeros(ncells(g),ncells(g))) end
+   dw = spacing(g,dir);
+   nw = size(g,dir);
    ∂w = ∂(bc,nw,dw,e⁻ⁱᵏᴸ);
    return kron(∂w[1], dir, g) , kron(∂w[2], dir, g)
 end
@@ -55,10 +55,10 @@ function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{1})
 end
 
 function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{2}) 
-   if dir == X
+   if dir == x̂
       Iy =  I(size(g,2)) 	
       return kron(Iy , ∂)
-   elseif dir == Y
+   elseif dir == ŷ
       Ix =  I(size(g,1)) 	
       return  kron(∂ , Ix)
    end	
@@ -67,13 +67,13 @@ end
 function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{3}) 
    nx,ny,nz = size(g)
    Iz =  I(nz) ; Iy =  I(ny) ; Ix = I(nx)
-   if dir == X
+   if dir == x̂
    return kron(Iz , Iy , ∂)
    end
-   if dir == Y
+   if dir == ŷ
    return  kron(Iz ,∂ , Ix)
    end
-   if dir == Z
+   if dir == ẑ
    return   kron(∂ ,Iy , Ix)
    end
  end	
