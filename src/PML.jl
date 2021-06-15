@@ -1,65 +1,44 @@
-export PML
+export  setpml!
+struct PML end
+const  setpml! = PML()
 
-mutable struct PML{ND}
-	_grid::Grid{ND}
-	_s::Array{Complex{Float},ND}	
-end
 
-"""
-	 PML(g::Grid{ND})
-Returns an object to be used later as functor that can be used to customize the PML length, sides and directions.	
-
-"""	
-function  PML(g::Grid{ND}) where ND
-			s = ones(Complex{Float},size(g))
-			return PML(g,s)
-end	
-	
-function Base.show(io::IO, g::PML{ND}) where ND
-        print(io, "PML with dimension:  $(ND)\n")
-end
-	
 _s(d::Real,L::Real;m::Real=3.5,s_min::Real= -1.0) = im*(s_min) * Complex((d/L))^m	
-
-s(::High,x,d,l)::Complex{Float} = ( _s(x - (l - d)  ,  d))
+s(::High,x,d,l)::Complex{Float} = (_s(x - (l - d)  ,  d))
 s(::Low,x,d,l)::Complex{Float}  = (_s(-x + d , d))
+	
+	
+function get_S_comp(sim::Simulation{Dim},  dir::Direction{D}) where {D,Dim}
+		   if D == 1 return sim.S_x end
+		   if D == 2 return sim.S_y end
+	       if D == 3 return sim.S_z end
+end
+	
+function (sim::Simulation)(::PML,dir::Direction{D},side::Low, thickness::Number,gridtype::GridType= p̂) where {D}
+S = get_S_comp(sim,dir)			
+ add!(S,sim.grid,x -> s(side,x[D],thickness, extent(sim.grid,dir)) ,x -> x[D] <= thickness, gridtype)		
+end
 
-
 	
-function (pml::PML{ND})(dir::Direction{D},side::Low, ncells = 10) where {ND,D}		
-g = pml._grid 
-I =  CartesianIndices(g,dir,1:ncells) 
-r  = Coordinates(g,p̂, I)
-thickness  = ncells * spacing(g,dir)
-l =  extent(g,dir)		
-pml._s[I] .+= (s(side,x[D],thickness,l) for x in r)
-return pml._s
+function (sim::Simulation)(::PML,dir::Direction{D},side::High, thickness::Number,gridtype::GridType= p̂) where {D}	
+S = get_S_comp(sim,dir)	
+ add!(S,sim.grid,x -> s(side,x[D],thickness, extent(sim.grid,dir)) ,x -> x[D] >= extent(sim.grid,dir) - thickness, gridtype)		
 end
 	
-function (pml::PML{ND})(dir::Direction{D},side::High, ncells::Int = 10) where {ND,D}		
-g = pml._grid 
-I =  CartesianIndices(g,dir,(size(g,dir)-ncells):size(g,dir)) 
-r  = Coordinates(g,p̂, I)
-thickness  = ncells * spacing(g,dir)
-l =  extent(g,dir)		
-pml._s[I] .+= (s(side,x[D],thickness,l) for x in r)
-return pml._s
-end
-			
-function (pml::PML{ND})(dir::Direction, ncells::Int = 10) where ND
-	pml(dir,LOW,ncells)
-	pml(dir,HIGH,ncells)
+function (sim::Simulation)(pml::PML,dir::Direction{D}, thickness::Number,gridtype::GridType= p̂) where {D}	
+ (sim::Simulation)(pml,dir,HIGH, thickness,gridtype)
+ (sim::Simulation)(pml,dir,LOW, thickness,gridtype)				
 end
 	
-function (pml::PML{1})(ncells::Int = 10) 
-	pml(x̂,ncells)
+function (sim::Simulation{1})(t::PML, thickness::Number,gridtype::GridType= p̂) 
+sim(t,x̂, thickness,gridtype)	
 end
-function (pml::PML{2})(ncells::Int = 10)
-	pml(x̂,ncells)	
-	pml(ŷ,ncells)
+function (sim::Simulation{2})(t::PML, thickness::Number,gridtype::GridType= p̂) 
+sim(t,x̂, thickness,gridtype)	
+sim(t,ŷ, thickness,gridtype)			
 end	
-function (pml::PML{3})(ncells::Int = 10)
-	pml(x̂,ncells)	
-	pml(ŷ,ncells)	
-	pml(ẑ,ncells)
+function (sim::Simulation{3})(t::PML, thickness::Number,gridtype::GridType= p̂) 	
+sim(t,x̂, thickness,gridtype)	
+sim(t,ŷ, thickness,gridtype)	
+sim(t,ẑ, thickness,gridtype)				
 end	
