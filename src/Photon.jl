@@ -11,7 +11,6 @@ using  Gnuplot
 include("types.jl")
 include("Interface/Grid.jl")
 include("Interface/Simulation.jl")
-include("utils.jl")
 include("Interface/Material.jl")
 include("Interface/TFSF.jl")
 include("Interface/PML.jl")
