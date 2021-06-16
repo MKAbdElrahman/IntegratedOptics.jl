@@ -1,5 +1,6 @@
 export Simulation
-	Base.@kwdef mutable struct Simulation{Dim}
+include("Grid.jl")	
+Base.@kwdef mutable struct Simulation{Dim}
 
 		grid::Grid{Dim}
 		
@@ -48,3 +49,10 @@ function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,
 	vals = valueF.(Coordinates(sim.grid,gridtype));
 	m[mask] = vals[mask];	
 end
+
+include("Material.jl")
+include("TFSF.jl")
+include("PML.jl")
+include("Sources/Source.jl")
+include("Sources/PlaneWave.jl")
+include("BC.jl")
