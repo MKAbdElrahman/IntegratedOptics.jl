@@ -1,6 +1,6 @@
 export Simulation
 	Base.@kwdef mutable struct Simulation{Dim}
-        
+
 		grid::Grid{Dim}
 		
 		src_x::Array{CFloat,Dim} = zeros(CFloat,size(grid))
@@ -21,6 +21,9 @@ export Simulation
 		μᵣ_xx::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		μᵣ_yy::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		μᵣ_zz::Array{CFloat,Dim}  = ones(CFloat,size(grid))
+
+        e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> 1.0 + 0.0im , dimension(grid))
+
 		
 	end
 	

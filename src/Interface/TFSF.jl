@@ -4,14 +4,14 @@ struct TFSF end
 const  setTFSF! = TFSF()
 
 function (sim::Simulation)(::TFSF, reg::Function, gridtype::GridType= p̂)
-	set!(sim.Q,sim.grid,x -> true,reg, gridtype)	
+	sim(set!,sim.Q,x -> true,reg, gridtype)	
 end
 function (sim::Simulation)(::TFSF,dir::Direction{D},side::Low, thickness::Number,gridtype::GridType= p̂) where {D}		
-set!(sim.Q,sim.grid,x -> true,x -> x[D] <= thickness, gridtype)		
+    sim(set!,sim.Q,x -> true,x -> x[D] <= thickness, gridtype)		
 end
 
 function (sim::Simulation)(::TFSF,dir::Direction{D},side::High, thickness::Number,gridtype::GridType= p̂) where {D}		
-set!(sim.Q,sim.grid,x -> true,x -> x[D] >= extent(sim.grid,dir)- thickness, gridtype)	
+    sim(set!,sim.Q,x -> true,x -> x[D] >= extent(sim.grid,dir)- thickness, gridtype)	
 end
 function (sim::Simulation)(t::TFSF,dir::Direction{D}, thickness::Number,gridtype::GridType= p̂) where {D}	
 sim(t,dir,HIGH, thickness,gridtype)	

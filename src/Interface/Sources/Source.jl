@@ -15,5 +15,5 @@ end
 
 ###################
 function (sim::Simulation)(::Source,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
-set!( get_src_comp(sim,  dir),sim.grid,val,reg,gridtype)	
+  sim(set!, get_src_comp(sim,  dir) , val,reg,gridtype)	
 end	

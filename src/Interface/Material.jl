@@ -20,9 +20,9 @@ function get_μ_comp(sim::Simulation{Dim},  dir::Direction{D}) where {D,Dim}
 end	
 
 function (sim::Simulation)(::ϵᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
-set!( get_ϵ_comp(sim,  dir),sim.grid,val,reg,gridtype)	
+sim(set!, get_ϵ_comp(sim,  dir),val,reg,gridtype)	
 end		
 
 function (sim::Simulation)(::μᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
-set!( get_μ_comp(sim,  dir),sim.grid,val,reg,gridtype)	
+sim(set!, get_μ_comp(sim,  dir),val,reg,gridtype)	
 end		

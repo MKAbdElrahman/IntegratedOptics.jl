@@ -9,21 +9,19 @@ using  Gnuplot
 
 
 include("types.jl")
-include("Grid.jl")
+include("Interface/Grid.jl")
+include("Interface/Simulation.jl")
 include("utils.jl")
-include("Simulation.jl")
-include("Devices/Device.jl")
-include("TFSF.jl")
-include("PML.jl")
-include("Sources/Source.jl")
-include("Sources/PlaneWave.jl")
-
-include("BC.jl")
-include("∂.jl")
-
+include("Interface/Material.jl")
+include("Interface/TFSF.jl")
+include("Interface/PML.jl")
+include("Interface/Sources/Source.jl")
+include("Interface/Sources/PlaneWave.jl")
+include("Interface/BC.jl")
+include("Solvers/FDFD/FDFDSolver.jl")
 #include("Devices/devices_2D.jl")
 #include("ModeSolver/scaler_mode_solver.jl")
 #include("sim_objects.jl")
-include("Plot.jl")
+include("Graphics/Plot.jl")
 
 end # module

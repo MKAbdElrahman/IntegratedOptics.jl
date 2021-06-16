@@ -1,13 +1,17 @@
-function set!(m::AbstractArray,grid::Grid,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂) 
-	mask = maskF.(Coordinates(grid,gridtype))
-	vals = valueF.(Coordinates(grid,gridtype));
-	m[mask] = vals[mask];
-	return nothing
-end	
+struct SimulationSetter end
+const set! = SimulationSetter()
 
-function add!(m::AbstractArray,grid::Grid,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂) 
-	mask = maskF.(Coordinates(grid,gridtype))
-	vals = valueF.(Coordinates(grid,gridtype));
-	m[mask] .+= vals[mask];
-	return nothing
-end	
+struct SimulationAdder end
+const add! = SimulationAdder()
+
+function (sim::Simulation)(::SimulationAdder,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+	mask = maskF.(Coordinates(sim.grid,gridtype))
+	vals = valueF.(Coordinates(sim.grid,gridtype));
+	m[mask] .+= vals[mask];	
+end
+
+function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+	mask = maskF.(Coordinates(sim.grid,gridtype))
+	vals = valueF.(Coordinates(sim.grid,gridtype));
+	m[mask] = vals[mask];	
+end
