@@ -1,3 +1,10 @@
+export solve_with_FDFD
+
+
+struct FDFDSolver end
+
+const solve_with_FDFD = FDFDSolver();
+
 
 struct Partial end
 struct Curl end
@@ -29,21 +36,27 @@ include("Curl.jl")
 include("CurlCurl.jl")
 
 
-export  A , b
-
 
 struct EpsI end
 const ϵᵣI = EpsI()
 
 struct SystemMatrix end
-const A = SystemMatrix()
+const system_matrix = SystemMatrix()
 
 struct LoadVector end
-const b = LoadVector()
+const source_vector = LoadVector()
 
+struct QTFSF end
+const  tfsf = QTFSF();
 
+######################################################################
 
-
+function (sim::Simulation)(::FDFDSolver, ls::AbstractLinearSolver)
+     A = sim(system_matrix)
+     b = sim(source_vector)
+     Q = sim(tfsf)
+     sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,ls) :   linsolve(A,b,ls)
+end
 #####################################################################
 
 
@@ -65,6 +78,15 @@ function (sim::Simulation)(::EpsI)
            [ ϵx     O       O;
                  O     ϵy      O;
                 O     O     ϵz
+            ]
+end	
+#########################################################################
+function (sim::Simulation)(::QTFSF)
+     QM =    spdiagm(sim.Q[:]) 
+     O = spzeros(ncells(sim.grid),ncells(sim.grid));
+           [ QM     O       O;
+                 O     QM      O;
+                O     O     QM
             ]
 end	
 #########################################################################

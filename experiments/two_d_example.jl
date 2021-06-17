@@ -13,14 +13,14 @@ sim(setsrc!,ẑ,x -> 1 , x-> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  dx)
 
 #sim(setsrc!,PlaneWave(k̂ = (0.0, 2pi/λ), ê = (0,0,1) , a = 1))
 
-sim(contourplot, :src_z, real ; xlabel = "x-axis", ylabel = "y-axis", title = "source x")
+#sim(contourplot, :src_z, real ; xlabel = "x-axis", ylabel = "y-axis", title = "source x")
 
 #sim(setTFSF! ,λ)
 #sim(contourplot, :Q, real ; xlabel = "x-axis", ylabel = "y-axis", title = "TFSF")
 
 sim(setpml!,1λ)
-sim(contourplot, :S_y, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML Y")
-sim(contourplot, :S_x, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML X")
+#sim(contourplot, :S_y, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML Y")
+#sim(contourplot, :S_x, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML X")
 
 #sim(setϵᵣ!,x̂,x -> 1, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
 #sim(setϵᵣ!,ŷ,x -> 1, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
@@ -30,14 +30,14 @@ sim(setϵᵣ!,x̂,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
 sim(setϵᵣ!,ŷ,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
 sim(setϵᵣ!,ẑ,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
 
-sim(contourplot,  :ϵᵣ_xx, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
-sim(contourplot, :ϵᵣ_yy, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ y")
-sim(contourplot, :ϵᵣ_zz, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ z")
+#sim(contourplot,  :ϵᵣ_xx, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
+#sim(contourplot, :ϵᵣ_yy, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ y")
+#sim(contourplot, :ϵᵣ_zz, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ z")
 
 Am = sim(A)
 bv = sim(b)
 
-x = Am \ bv
+x = sim(solve_with_FDFD,using_direct_solver)
 Ex,Ey,Ez = sim(reshapefield,x,Val(3))
 sim(contourplot, Ez, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
 
@@ -59,5 +59,11 @@ x = Am \ bb
 
 =#
 
-sim_wg = sim(slice, x̂ , (.5Lx,.5Ly))
-sim_wg(lineplot, :ϵᵣ_xx,real)
+
+
+
+#dirs  = directions(sim3.grid) 
+#filt =  dirs .!= fill(x̂,3)
+#ex = extent(sim3.grid)[filt] 
+#spa = spacing(sim3.grid)[filt] 
+

@@ -10,6 +10,7 @@ using  Gnuplot
 
 include("types.jl")
 include("Interface/Simulation.jl")
+include("LinearAlgebra/LinearSolver.jl")
 include("Solvers/FDFD/FDFDSolver.jl")
 include("PostProcessing/PostProcess.jl")
 #include("Devices/devices_2D.jl")

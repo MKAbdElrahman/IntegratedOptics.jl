@@ -5,13 +5,16 @@ const  setTFSF! = TFSF()
 
 function (sim::Simulation)(::TFSF, reg::Function, gridtype::GridType= p̂)
 	sim(set!,sim.Q,x -> true,reg, gridtype)	
+    sim.activate_tfsf = true;
 end
 function (sim::Simulation)(::TFSF,dir::Direction{D},side::Low, thickness::Number,gridtype::GridType= p̂) where {D}		
     sim(set!,sim.Q,x -> true,x -> x[D] <= thickness, gridtype)		
+    sim.activate_tfsf = true;
 end
 
 function (sim::Simulation)(::TFSF,dir::Direction{D},side::High, thickness::Number,gridtype::GridType= p̂) where {D}		
     sim(set!,sim.Q,x -> true,x -> x[D] >= extent(sim.grid,dir)- thickness, gridtype)	
+    sim.activate_tfsf = true;
 end
 function (sim::Simulation)(t::TFSF,dir::Direction{D}, thickness::Number,gridtype::GridType= p̂) where {D}	
 sim(t,dir,HIGH, thickness,gridtype)	

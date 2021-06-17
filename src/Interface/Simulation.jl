@@ -16,6 +16,8 @@ Base.@kwdef mutable struct Simulation{Dim}
 		S_y::Array{CFloat,Dim} = ones(CFloat,size(grid))
 		S_z::Array{CFloat,Dim} = ones(CFloat,size(grid))
 		
+		activate_tfsf::Bool = false
+
 		
 		ϵᵣ_xx::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		ϵᵣ_yy::Array{CFloat,Dim}  = ones(CFloat,size(grid))
