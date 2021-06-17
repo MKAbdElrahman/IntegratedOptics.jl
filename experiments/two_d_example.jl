@@ -22,9 +22,13 @@ sim(setpml!,1λ)
 sim(contourplot, :S_y, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML Y")
 sim(contourplot, :S_x, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML X")
 
-sim(setϵᵣ!,x̂,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
-sim(setϵᵣ!,ŷ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
-sim(setϵᵣ!,ẑ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+#sim(setϵᵣ!,x̂,x -> 1, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+#sim(setϵᵣ!,ŷ,x -> 1, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+#sim(setϵᵣ!,ẑ,x -> 1, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+
+sim(setϵᵣ!,x̂,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
+sim(setϵᵣ!,ŷ,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
+sim(setϵᵣ!,ẑ,x -> 5, x ->  abs(x[1]-Lx/2) <=  3 && abs(x[2]-Ly/2) <=  1.5 )
 
 sim(contourplot,  :ϵᵣ_xx, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 sim(contourplot, :ϵᵣ_yy, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ y")
@@ -54,3 +58,6 @@ x = Am \ bb
 #
 
 =#
+
+sim_wg = sim(slice, x̂ , (.5Lx,.5Ly))
+sim_wg(lineplot, :ϵᵣ_xx,real)

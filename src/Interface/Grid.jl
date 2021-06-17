@@ -1,6 +1,6 @@
 
 export Grid, Coordinate ,Coordinates , dimension , extent , spacing , ncells , range 
-
+export directions
 
 
 struct Grid{N}
@@ -115,3 +115,9 @@ end
 function Base.CartesianIndices(g::Grid{ND},dir::Direction{D}, r::UnitRange{Int}) where {ND,D}
     CartesianIndices(ntuple(i -> (D == i) ? r : size(g,i), ND))	
 end
+
+
+
+directions(g::Grid{1}) = (x̂,)
+directions(g::Grid{2}) = (x̂,ŷ) 
+directions(g::Grid{3}) = (x̂,ŷ,ẑ)           
