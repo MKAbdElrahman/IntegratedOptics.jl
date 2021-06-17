@@ -4,6 +4,8 @@ Base.@kwdef mutable struct Simulation{Dim}
 
 		grid::Grid{Dim}
 		
+		λ₀::Float64
+
 		src_x::Array{CFloat,Dim} = zeros(CFloat,size(grid))
 		src_y::Array{CFloat,Dim} = zeros(CFloat,size(grid))
 		src_z::Array{CFloat,Dim} = zeros(CFloat,size(grid))
@@ -54,5 +56,4 @@ include("Material.jl")
 include("TFSF.jl")
 include("PML.jl")
 include("Sources/Source.jl")
-include("Sources/PlaneWave.jl")
 include("BC.jl")

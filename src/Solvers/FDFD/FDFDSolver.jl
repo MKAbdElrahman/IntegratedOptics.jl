@@ -48,7 +48,7 @@ const b = LoadVector()
 
 
 function (sim::Simulation)(::SystemMatrix)
-     sim(∇ₛxμⁱ∇ₛx) - sim(ϵᵣI)
+     sim(∇ₛxμⁱ∇ₛx) - (2pi/sim.λ₀)^2*sim(ϵᵣI)
 end	
   
 function (sim::Simulation)(::LoadVector)
