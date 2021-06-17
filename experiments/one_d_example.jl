@@ -10,10 +10,9 @@ sim = Simulation(λ₀ = 1.55 ;  grid = Grid(extent = Lx , spacing =  dx ))
 sim(setsrc!,ẑ,x -> 1 , x-> abs(x[1] - 0.5Lx[1]) < 1.5dx)
 sim(lineplot,:src_z,real)
 
-unique(sim.src_z)
-sim(setTFSF! ,4pi)
-#sim(lineplot,:Q,real)
-sim(setpml!,3*1.55)
+sim(setTFSF!,5)
+sim(lineplot,:Q,real)
+sim(setpml!,4)
 sim(lineplot,:S_x,imag)
 
 

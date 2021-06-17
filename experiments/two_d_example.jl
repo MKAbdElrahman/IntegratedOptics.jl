@@ -1,36 +1,43 @@
 using Photon
 
 Nx = 20; Ny = 20;
-dx = 2pi/Nx; dy = 2pi/Ny
-Lx = 8 * 2pi; Ly =  8 *  2pi
+λ = 1.55; 
 
-sim = Simulation(grid = Grid(extent = (Lx, Ly), spacing = (dx,dy)))
-sim(setsrc!,PlaneWave(k̂ = (0.0, 1.0), ê = (0,0,1) , a = 1))
+dx = λ/Nx;dy = λ/Ny 
 
+Lx = 10 * λ;
+Ly = 10 * λ;
+
+sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly) , spacing =  (dx,dy) ))
+sim(setsrc!,ẑ,x -> 1 , x-> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  dx)
+
+#sim(setsrc!,PlaneWave(k̂ = (0.0, 2pi/λ), ê = (0,0,1) , a = 1))
 
 sim(contourplot, :src_z, real ; xlabel = "x-axis", ylabel = "y-axis", title = "source x")
 
-sim(setTFSF! ,3pi)
-sim(contourplot, :Q, real ; xlabel = "x-axis", ylabel = "y-axis", title = "TFSF")
+#sim(setTFSF! ,λ)
+#sim(contourplot, :Q, real ; xlabel = "x-axis", ylabel = "y-axis", title = "TFSF")
 
-sim(setpml!,3pi)
+sim(setpml!,1λ)
 sim(contourplot, :S_y, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML Y")
 sim(contourplot, :S_x, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "PML X")
 
-sim(setϵᵣ!,x̂,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5pi )
-sim(setϵᵣ!,ŷ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5pi )
-sim(setϵᵣ!,ẑ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5pi )
+sim(setϵᵣ!,x̂,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+sim(setϵᵣ!,ŷ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
+sim(setϵᵣ!,ẑ,x -> 8, x -> sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2) <=  1.5 )
 
 sim(contourplot,  :ϵᵣ_xx, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 sim(contourplot, :ϵᵣ_yy, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ y")
 sim(contourplot, :ϵᵣ_zz, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ z")
-#=
+
 Am = sim(A)
-Amm =    sim(Photon.∇ₛxμⁱ∇ₛx) - sim(Photon.ϵᵣI)
 bv = sim(b)
 
+x = Am \ bv
+Ex,Ey,Ez = sim(reshapefield,x,Val(3))
+sim(contourplot, Ez, imag ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
 
-
+#=
 using SparseArrays
 O = spzeros(ncells(sim.grid),ncells(sim.grid));
 

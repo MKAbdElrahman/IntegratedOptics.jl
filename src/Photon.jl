@@ -1,7 +1,7 @@
 module Photon
 
 using LinearAlgebra: getproperty
-using Base: Symbol
+using Base: Symbol, Float64
 using  LinearAlgebra
 using  SparseArrays
 #using  Arpack 
