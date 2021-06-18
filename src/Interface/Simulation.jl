@@ -54,6 +54,31 @@ function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,
 	m[mask] = vals[mask];	
 end
 
+
+
+function (sim::Simulation)(sym::Symbol,dir::Direction) 
+    !(sym === :ϵᵣ && x̂ == dir ) || return sim.ϵᵣ_xx
+	!(sym === :ϵᵣ && ŷ == dir ) || return sim.ϵᵣ_yy
+	!(sym === :ϵᵣ && ẑ == dir ) || return sim.ϵᵣ_zz
+
+	!(sym === :μᵣ && x̂ == dir ) || return sim.μᵣ_xx
+	!(sym === :μᵣ && ŷ == dir ) || return sim.μᵣ_yy
+	!(sym === :μᵣ && ẑ == dir ) || return sim.μᵣ_zz
+
+	!(sym === :J && x̂ == dir ) || return sim.src_x
+	!(sym === :J && ŷ == dir ) || return sim.src_y
+	!(sym === :J && ẑ == dir ) || return sim.src_z
+
+	!(sym === :S && x̂ == dir ) || return sim.S_x
+	!(sym === :S && ŷ == dir ) || return sim.S_y
+	!(sym === :S && ẑ == dir ) || return sim.S_z
+
+
+	!(sym === :Q && x̂ == dir ) || return sim.Q
+	!(sym === :Q && ŷ == dir ) || return sim.Q
+	!(sym === :Q && ẑ == dir ) || return sim.Q
+end
+
 include("Material.jl")
 include("TFSF.jl")
 include("PML.jl")

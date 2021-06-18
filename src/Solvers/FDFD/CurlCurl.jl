@@ -3,15 +3,7 @@ function (sim::Simulation)(::CurlCurl)
 end
  
 function (sim::Simulation)(::CurlμⁱCurl)
-    μxi =    spdiagm((1  ./ get_μ_comp(sim,  x̂))[:]) 
-    μyi =    spdiagm((1  ./ get_μ_comp(sim,  ŷ))[:])
-    μzi =    spdiagm((1  ./ get_μ_comp(sim,  ẑ))[:]) 
-    O = spzeros(ncells(sim.grid),ncells(sim.grid));
-    μi = [μxi    O     O;
-            O    μyi     O;
-            O     O     μzi
-        ]
-
+    μi =  sim(convert_to_diagonal_matrix,:μᵣ)
     sim(∇x, d̂) *  μi  * sim(∇x, p̂)
 end
 
@@ -21,14 +13,6 @@ function (sim::Simulation)(::CurlₛCurlₛ)
 end
    
 function (sim::Simulation)(::CurlₛμⁱCurlₛ)
-    μxi =    spdiagm((1  ./ get_μ_comp(sim,  x̂))[:]) 
-    μyi =    spdiagm((1  ./ get_μ_comp(sim,  ŷ))[:])
-    μzi =    spdiagm((1  ./ get_μ_comp(sim,  ẑ))[:]) 
-    O = spzeros(ncells(sim.grid),ncells(sim.grid));
-    μi =  [ μxi     O       O;
-               O      μyi     O;
-               O      O     μzi
-         ]
-
+    μi =  sim(convert_to_diagonal_matrix,:μᵣ)
     sim(∇ₛx, d̂) *  μi  * sim(∇ₛx, p̂)
 end	

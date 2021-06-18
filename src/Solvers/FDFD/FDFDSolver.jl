@@ -31,10 +31,10 @@ const ∇ₛxμⁱ∇ₛx = CurlₛμⁱCurlₛ()
 
 
 include("kron.jl")
+include("Utils.jl")
 include("Partial.jl")
 include("Curl.jl")
 include("CurlCurl.jl")
-
 
 
 struct EpsI end
@@ -43,8 +43,8 @@ const ϵᵣI = EpsI()
 struct SystemMatrix end
 const system_matrix = SystemMatrix()
 
-struct LoadVector end
-const source_vector = LoadVector()
+struct SourceVector end
+const source_vector = SourceVector()
 
 struct QTFSF end
 const  tfsf = QTFSF();
@@ -64,29 +64,17 @@ function (sim::Simulation)(::SystemMatrix)
      sim(∇ₛxμⁱ∇ₛx) - (2pi/sim.λ₀)^2*sim(ϵᵣI)
 end	
   
-function (sim::Simulation)(::LoadVector)
-[ get_src_comp(sim, x̂)[:] ; get_src_comp(sim, ŷ)[:] ; get_src_comp(sim, ẑ)[:]  ] 
+function (sim::Simulation)(::SourceVector)
+     sim(convert_to_vector,:J)
 end	
   
 
 ########################################################################
 function (sim::Simulation)(::EpsI)
-     ϵx =    spdiagm((get_ϵ_comp(sim,  x̂))[:]) 
-     ϵy =    spdiagm((get_ϵ_comp(sim,  ŷ))[:])
-     ϵz =    spdiagm((get_ϵ_comp(sim,  ẑ))[:]) 
-     O = spzeros(ncells(sim.grid),ncells(sim.grid));
-           [ ϵx     O       O;
-                 O     ϵy      O;
-                O     O     ϵz
-            ]
+     sim(convert_to_diagonal_matrix,:ϵᵣ)
 end	
 #########################################################################
 function (sim::Simulation)(::QTFSF)
-     QM =    spdiagm(sim.Q[:]) 
-     O = spzeros(ncells(sim.grid),ncells(sim.grid));
-           [ QM     O       O;
-                 O     QM      O;
-                O     O     QM
-            ]
+     sim(convert_to_diagonal_matrix,:Q)
 end	
 #########################################################################
