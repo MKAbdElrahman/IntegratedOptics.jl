@@ -4,9 +4,9 @@ struct Source end
 const  setsrc! = Source()
 
 function get_src_comp(sim::Simulation{Dim},  dir::Direction{D}) where {D,Dim}
-	if D == 1 return sim.src_x end
-	if D == 2 return sim.src_y end
-	if D == 3 return sim.src_z end
+	if D == 1 return sim.J_x end
+	if D == 2 return sim.J_y end
+	if D == 3 return sim.J_z end
 end
 
 function (sim::Simulation)(::Source,dir::Direction,src::AbstractArray)

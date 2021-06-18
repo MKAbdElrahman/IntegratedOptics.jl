@@ -1,5 +1,7 @@
 export setϵᵣ! ,  setμᵣ! , setmaterial! 
 export Material
+export ϵ₁ , ϵ₂ , n , κ
+
 struct ϵᵣ end
 struct μᵣ end
 
@@ -14,6 +16,11 @@ struct Material{T1,T2,T3}
     ϵr_xx::T1
     ϵr_yy::T2
     ϵr_zz::T3
+end
+
+
+function Material( ; ϵᵣ::Number)
+    Material(ϵᵣ,ϵᵣ,ϵᵣ)
 end
 
 function (sim::Simulation)(setmaterial!, mat::Material, region::Function)
@@ -44,3 +51,9 @@ function (sim::Simulation)(::μᵣ,dir::Direction,val::Function, reg::Function =
 sim(set!, get_μ_comp(sim,  dir),val,reg,gridtype)	
 end		
 
+
+ϵ₁(n::Real,κ::Real) = n^2 - κ^2
+ϵ₂(n::Real,κ::Real) = 2*n*κ
+
+n(ϵ₁::Real,ϵ₂::Real) = 1/sqrt(2)  * sqrt(ϵ₁  + sqrt(ϵ₁^2 + ϵ₂^2))
+κ(ϵ₁::Real,ϵ₂::Real) = 1/sqrt(2)  * sqrt(-ϵ₁ + sqrt(ϵ₁^2 + ϵ₂^2))
