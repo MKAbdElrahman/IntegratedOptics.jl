@@ -37,8 +37,6 @@ material = Material(ϵᵣ = 13.491 + 0.036730im )
 Disk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 sim(setmaterial!,material,Disk)
 
+Ex,Ey,Ez = sim(solve_with_FDFD,using_direct_solver)
 
-x = sim(solve_with_FDFD,using_direct_solver)
-
-Ex,Ey,Ez = sim(reshapefield,x)
 ```
