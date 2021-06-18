@@ -5,6 +5,7 @@ using Base: Symbol, Float64
 using  LinearAlgebra
 using  SparseArrays
 using  Arpack 
+using  Zygote
 using  Gnuplot
 
 
@@ -17,6 +18,7 @@ include("PostProcessing/PostProcess.jl")
 #include("Devices/devices_2D.jl")
 #include("ModeSolver/scaler_mode_solver.jl")
 #include("sim_objects.jl")
+include("Optimization/AdjointMethod/Sensitivty.jl")
 include("Graphics/Plot.jl")
 
 end # module
