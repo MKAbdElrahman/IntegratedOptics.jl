@@ -32,7 +32,6 @@ sim(setmaterial!,material,Disk)
 sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 
 
-x = sim(solve_with_FDFD,using_direct_solver)
-Ex,Ey,Ez = sim(reshapefield,x)
+Ex,Ey,Ez  = sim(solve_with_FDFD,using_direct_solver)
 
 sim(contourplot,Ez, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")

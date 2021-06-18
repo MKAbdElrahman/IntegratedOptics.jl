@@ -55,7 +55,8 @@ function (sim::Simulation)(::FDFDSolver, ls::AbstractLinearSolver)
      A = sim(system_matrix)
      b = sim(source_vector)
      Q = sim(tfsf)
-     sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,ls) :   linsolve(A,b,ls)
+     sim(reshapefield,sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,ls) :   linsolve(A,b,ls))
+
 end
 #####################################################################
 

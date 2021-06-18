@@ -40,5 +40,3 @@ function (sim::Simulation)(::ReshapeField, F::AbstractVector, ncomps::Val{1})
     Fx = reshape(F,size(g));
     return Fx
 end
-
-
