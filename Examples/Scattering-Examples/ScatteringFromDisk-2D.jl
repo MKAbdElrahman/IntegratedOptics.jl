@@ -35,3 +35,9 @@ sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", tit
 Ex,Ey,Ez  = sim(solve_with_FDFD,using_direct_solver)
 
 sim(contourplot,Ez, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+
+import LinearAlgebra: norm
+objective(Ex,Ey,Ez) = 0*norm(Ex) +  norm(Ez) +  0*norm(Ey)
+(sens_x,sens_y,sens_z) = sim(sensitivity,objective, using_direct_solver)
+
+sim(contourplot,sens_z, real ; xlabel = "x-axis", ylabel = "y-axis", title = "sens_x")
