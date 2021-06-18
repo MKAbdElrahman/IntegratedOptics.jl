@@ -4,6 +4,13 @@ export reshapefield
 struct ReshapeField end
 const reshapefield = ReshapeField();
 
+
+function (sim::Simulation)(::ReshapeField, F::AbstractVector)
+    ncomps = Int(length(F) / ncells(sim.grid))
+    sim(reshapefield,F,Val{ncomps}())
+end
+
+
 function (sim::Simulation)(::ReshapeField, F::AbstractVector, ncomps::Val{3})
     g = sim.grid
     Nw = ncells(g);
@@ -26,8 +33,12 @@ function (sim::Simulation)(::ReshapeField, F::AbstractVector, ncomps::Val{2})
     return (Fx,Fy)
 end
 
+
+
 function (sim::Simulation)(::ReshapeField, F::AbstractVector, ncomps::Val{1})
     g = sim.grid
     Fx = reshape(F,size(g));
     return Fx
 end
+
+

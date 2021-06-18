@@ -27,3 +27,5 @@ function (sim::Simulation)(::ConvertToVector,symbol::Symbol)
     fz  =   sim(symbol,ẑ)[:]
     [fx ; fy ; fz]
 end
+
+

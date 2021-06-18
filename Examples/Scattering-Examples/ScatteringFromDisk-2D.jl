@@ -33,6 +33,6 @@ sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", tit
 
 
 x = sim(solve_with_FDFD,using_direct_solver)
-Ex,Ey,Ez = sim(reshapefield,x,Val(3))
+Ex,Ey,Ez = sim(reshapefield,x)
 
 sim(contourplot,Ez, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
