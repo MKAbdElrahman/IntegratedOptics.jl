@@ -34,8 +34,8 @@ sim(setsrc!, PlaneWave(k̂ = (0,2pi/λ), ê = (0,0,1)))
 sim(setTFSF! ,1.5λ)
 
 Si = Material(ϵᵣ = 13.491 + 0.036730im )
-Disk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
-sim(setmaterial!,Si,Disk)
+inDisk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
+sim(setmaterial!,Si,inDisk)
 
 Ex,Ey,Ez = sim(solve_with_FDFD,using_direct_solver)
 
