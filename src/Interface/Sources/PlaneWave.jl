@@ -15,3 +15,4 @@ sim(src,x̂,x -> pw.a * exp(-im * dot(pw.k̂, x)) * pw.ê[1],reg,gridtype)
 sim(src,ŷ,x -> pw.a * exp(-im * dot(pw.k̂, x)) * pw.ê[2],reg,gridtype)		
 sim(src,ẑ,x -> pw.a * exp(-im * dot(pw.k̂, x)) * pw.ê[3],reg,gridtype)			
 end	
+########################################################

@@ -20,6 +20,19 @@ function (sim::Simulation)(::ContourPlot, q::Symbol ,fun::Function = identity,
    @gp :- xlab = xlabel ylab = ylabel "set size ratio -1"	
 end
 
+
+function (sim::Simulation)(::ContourPlot, q::Symbol , dir::Direction, fun::Function = identity,
+   ; xlabel = "x" , ylabel = "y", title = "contour plot ")	
+   x = range(sim.grid,x̂)
+   y = range(sim.grid,ŷ)
+   z  = sim(q,dir)
+   @gp x y fun.(z) "w image notit" "set auto fix" "set size square"
+   @gp :- xlab = xlabel ylab = ylabel "set cblabel 'z'" palette(:dense)
+   @gp :- title = title
+   @gp :- xlab = xlabel ylab = ylabel "set size ratio -1"	
+end
+
+
 function (sim::Simulation)(::ContourPlot, z::AbstractArray ,fun::Function = identity,
    ; xlabel = "x" , ylabel = "y", title = "contour plot ")	
    x = range(sim.grid,x̂)
