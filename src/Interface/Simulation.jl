@@ -6,9 +6,9 @@ Base.@kwdef mutable struct Simulation{Dim}
 		
 		λ₀::Float64
 
-		src_x::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		src_y::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		src_z::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		J_x::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		J_y::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		J_z::Array{CFloat,Dim} = zeros(CFloat,size(grid))
 		
 		Q::BitArray{Dim}	 = falses(size(grid))
 		
@@ -65,9 +65,9 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :μᵣ && ŷ == dir ) || return sim.μᵣ_yy
 	!(sym === :μᵣ && ẑ == dir ) || return sim.μᵣ_zz
 
-	!(sym === :J && x̂ == dir ) || return sim.src_x
-	!(sym === :J && ŷ == dir ) || return sim.src_y
-	!(sym === :J && ẑ == dir ) || return sim.src_z
+	!(sym === :J && x̂ == dir ) || return sim.J_x
+	!(sym === :J && ŷ == dir ) || return sim.J_y
+	!(sym === :J && ẑ == dir ) || return sim.J_z
 
 	!(sym === :S && x̂ == dir ) || return sim.S_x
 	!(sym === :S && ŷ == dir ) || return sim.S_y

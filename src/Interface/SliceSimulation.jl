@@ -15,9 +15,9 @@ sim_wg = Simulation(λ₀ = sim.λ₀ ;  grid = Grid(extent = ext , spacing =  s
 
 ind = CartesianIndex(sim.grid,p̂,p)[D]
 
-sim_wg.src_x = selectdim(sim.src_x, D , ind)
-sim_wg.src_y = selectdim(sim.src_y, D , ind)
-sim_wg.src_z = selectdim(sim.src_z, D , ind)
+sim_wg.J_x = selectdim(sim.J_x, D , ind)
+sim_wg.J_y = selectdim(sim.J_y, D , ind)
+sim_wg.J_z = selectdim(sim.J_z, D , ind)
 
 sim_wg.Q = selectdim(sim.Q, D , ind)
 sim_wg.S_x = selectdim(sim.S_x, D , ind)
