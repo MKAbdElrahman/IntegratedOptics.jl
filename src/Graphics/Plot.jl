@@ -55,3 +55,11 @@ function (sim::Simulation)(::LinePlot, q::Symbol ,fun::Function = identity,
    z  = getproperty(sim,q) 
    @gp  x fun.(z)  "w l tit 'lineplot'   dt 1 lw 3 lc rgb 'blue'"  "set auto fix"
 end
+
+
+function (sim::Simulation)(::LinePlot, q::Symbol , dir::Direction, fun::Function = identity,
+   ; xlabel = "x" , title = "contour plot ")	
+   x = range(sim.grid,x̂)
+   z  = sim(q,dir)
+   @gp  x fun.(z)  "w l tit 'lineplot'   dt 1 lw 3 lc rgb 'blue'"  "set auto fix"
+end
