@@ -54,7 +54,7 @@ Ex,Ey,Ez = sim(solve_with_FDFD,using_direct_solver)
 * complex stretched PML
 ### Solvers
 - direct solvers 
-- iterative solvers (GMRES and BICGSTABl
+- iterative solvers (GMRES and BICGSTABl)
 ### Plots
 - line plots
 - contour plots
