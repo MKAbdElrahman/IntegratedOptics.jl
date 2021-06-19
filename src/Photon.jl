@@ -5,6 +5,7 @@ using Base: Symbol, Float64
 using  LinearAlgebra
 using  SparseArrays
 using  Arpack 
+using IterativeSolvers
 using  Zygote
 using  Gnuplot
 

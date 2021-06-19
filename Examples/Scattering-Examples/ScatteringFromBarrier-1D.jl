@@ -24,6 +24,6 @@ inBarrier(x) = abs(x[1] - 0.5Lx[1]) < 0.5λ
 sim(setmaterial!,material,inBarrier)
 #sim(lineplot, :ϵᵣ,ẑ,real)
 
-Ex,Ey,Ez  = sim(solve_with_FDFD,using_direct_solver)
+Ex,Ey,Ez  = sim(solve_with_FDFD,using_gmres)
 
-#sim(lineplot,Ez, real ; xlabel = "x-axis", title = "Ez")
+sim(lineplot,Ez, real ; xlabel = "x-axis", title = "Ez")
