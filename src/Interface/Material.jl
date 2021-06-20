@@ -47,7 +47,7 @@ function (sim::Simulation)(::ϵᵣ,dir::Direction,val::Function, reg::Function =
 sim(set!, get_ϵ_comp(sim,  dir),val,reg,gridtype)	
 end		
 
-function (sim::Simulation)(::μᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
+function (sim::Simulation)(::μᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType = d̂) 
 sim(set!, get_μ_comp(sim,  dir),val,reg,gridtype)	
 end		
 

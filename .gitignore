@@ -2,3 +2,5 @@
 *.jl.cov
 *.jl.mem
 /docs/build/
+/Examples/Sensitivty-Examples/
+/Examples/Inverse-Design-Examples/

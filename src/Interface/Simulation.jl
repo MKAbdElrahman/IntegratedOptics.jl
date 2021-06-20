@@ -48,6 +48,11 @@ function (sim::Simulation)(::SimulationAdder,m::AbstractArray,valueF::Function,m
 	m[mask] .+= vals[mask];	
 end
 
+function (sim::Simulation)(::SimulationAdder,m::AbstractArray,vals::AbstractArray,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+	mask = maskF.(Coordinates(sim.grid,gridtype))
+	m[mask] .+= vals[mask];	
+end
+
 function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));

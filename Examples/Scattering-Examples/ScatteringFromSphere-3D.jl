@@ -8,7 +8,7 @@ Ly = 6 * λ;
 Lz = 6 * λ;
 
 
-sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly,Lz) , spacing =  (λ/15,λ/15,λ/15) ))
+sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly,Lz) , spacing =  (λ/10,λ/10,λ/10) ))
 
 sim(setpml!,λ)
 

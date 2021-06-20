@@ -14,5 +14,5 @@ function (sim::Simulation)(::Sensitivity,obj::Function,ls::AbstractLinearSolver)
     bᵃ = [∂L∂Ex[:] ; ∂L∂Ey[:] ; ∂L∂Ez[:]]
     xᵃ =  linsolve(Aᵃ,bᵃ,ls)
     sens = sim(convert_to_vector,:ϵᵣ) .* xᵃ .*  [ Ex[:] ; Ey[:]; Ez[:] ]
-    sim(reshapefield,sens)
+    (obj(Ex,Ey,Ez),sim(reshapefield,sens))
 end
