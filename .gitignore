@@ -3,4 +3,4 @@
 *.jl.mem
 /docs/build/
 /Examples/Sensitivty-Examples/
-/Examples/Inverse-Design-Examples/
+*-test.jl
