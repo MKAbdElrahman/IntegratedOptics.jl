@@ -36,8 +36,9 @@ sim(setTFSF! ,1.5λ)
 Si = Material(ϵᵣ = 13.491 + 0.036730im )
 inDisk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 sim(setmaterial!,Si,inDisk)
+sim(init!)
+sim(solve!)
 
-Ex,Ey,Ez = sim(solve_with_FDFD,using_direct_solver)
 ```
 ## Features List
 ### Spaces
