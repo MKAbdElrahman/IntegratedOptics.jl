@@ -29,29 +29,5 @@ sim(setmaterial!,Silver,Disk)
 
  sim(init!)
  sim(solve!)
- using SparseArrays
- 
-δϵᵣ = zeros(ComplexF64,3*ncells(sim.grid))   
-import LinearAlgebra: norm
 
-
-
-function  objective_function(sim) 
-    norm(sim(:E,ẑ , Disk))
-end
-
-
-for i in 1:100
-println(i, ": objective_function: ",objective_function(sim)  )
-sim(sensitivity!,objective_function)
-δϵᵣ  .= 0.1 * (2pi/sim.λ₀)^2 * (sim.sensitivity)/norm(sim.sensitivity)
-
-sim(add!,sim(:ϵᵣ,x̂),sim(ExtractReshape(),δϵᵣ ,x̂),Disk)
-sim(add!,sim(:ϵᵣ,ŷ),sim(ExtractReshape(),δϵᵣ ,ŷ),Disk)
-sim(add!,sim(:ϵᵣ,ẑ),sim(ExtractReshape(),δϵᵣ ,ẑ),Disk)
-
-sim.sysetm_matrix .+= spdiagm(0=>  δϵᵣ )
-sim(solve!)
-end
-
-display(sim(contourplot,:E,ẑ, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez"))
+ sim(contourplot,  :E, ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")

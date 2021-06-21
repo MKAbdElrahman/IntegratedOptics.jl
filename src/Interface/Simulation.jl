@@ -22,7 +22,7 @@ Base.@kwdef mutable struct Simulation{Dim}
 		activate_tfsf::Bool = false
 
 		
-		::Array{CFloat,Dim}  = ones(CFloat,size(grid))
+		ϵᵣ_xx::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		ϵᵣ_yy::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		ϵᵣ_zz::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		
