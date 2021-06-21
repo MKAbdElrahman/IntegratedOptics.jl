@@ -1,5 +1,8 @@
 export Simulation
 include("Grid.jl")	
+
+export get, set!,add!
+
 Base.@kwdef mutable struct Simulation{Dim}
 
 		grid::Grid{Dim}
@@ -27,7 +30,7 @@ Base.@kwdef mutable struct Simulation{Dim}
 		μᵣ_yy::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		μᵣ_zz::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 
-        e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> 1.0 + 0.0im , dimension(grid))
+        e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> CFloat(1.0 + 0.0im) , dimension(grid))
 
 		E::Vector{CFloat}   = zeros(CFloat,3*ncells(grid))
 		H::Vector{CFloat}   = zeros(CFloat,3*ncells(grid)) 
@@ -49,6 +52,10 @@ const set! = SimulationSetter()
 struct SimulationAdder end
 const add! = SimulationAdder()
 
+struct SimulationGetter end
+const get = SimulationGetter()
+
+
 function (sim::Simulation)(::SimulationAdder,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));
@@ -64,6 +71,13 @@ function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));
 	m[mask] = vals[mask];	
+end
+
+
+function (sim::Simulation)(sym::Symbol,dir::Direction, maskF::Function) 
+	mat = sim(sym,dir) 
+	mask = maskF.(Coordinates(sim.grid,p̂))
+	mat[mask]
 end
 
 

@@ -54,7 +54,7 @@ struct SourceVector end
 const source_vector! = SourceVector()
 
 struct TFSFSourceVector end
-const set_tfsf_source_vector! = TFSFSourceVector()
+const tfsf_source_vector = TFSFSourceVector()
 
 struct QTFSF end
 const  tfsf = QTFSF();
@@ -65,14 +65,14 @@ const init! = InitSystemMatrices()
 
 ######################################################################
 
-function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU())      
-      linsolve!(sim.E,sim.sysetm_matrix,sim.source_vector,linearsolver)
-#      sim.H =  sim( μⁱ∇ₛx  ) * sim.E
+function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU())  
+      sim.activate_tfsf ?  src = sim(tfsf_source_vector)  : src = sim.source_vector   
+      linsolve!(sim.E,sim.sysetm_matrix,src,linearsolver)
       return nothing
 end
 
 function (sim::Simulation)(::AdjointFDFDSolver,adjointsrc::AbstractVector; linearsolver::AbstractLinearSolver = LU())      
-     linsolve!(sim.E_adjoint,adjoint(sim.sysetm_matrix),sim.source_vector,linearsolver)
+     linsolve!(sim.E_adjoint,adjoint(sim.sysetm_matrix),adjointsrc,linearsolver)
      return nothing
 end
 #####################################################################
@@ -89,7 +89,6 @@ end
 function (sim::Simulation)(::InitSystemMatrices)
      sim(system_matrix!)
      sim(source_vector!)
-     if sim.activate_tfsf  sim(set_tfsf_source_vector!)   end
 end	
        
 ########################################################################
@@ -106,5 +105,5 @@ function (sim::Simulation)(::TFSFSourceVector)
      Q = sim(tfsf)
      A = sim.sysetm_matrix
      b = sim.source_vector
-     sim.source_vector = (Q*A - A*Q) * b 
+     (Q*A - A*Q) * b 
 end
