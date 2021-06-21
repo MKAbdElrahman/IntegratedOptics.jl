@@ -1,9 +1,11 @@
-export solve! ,  init!
+export solve! , adjointsolve! ,  init!
 
 
 struct FDFDSolver end
-const solve! = FDFDSolver()
+struct  AdjointFDFDSolver end
 
+const solve! = FDFDSolver()
+const adjointsolve! =  AdjointFDFDSolver()
 
 
 
@@ -65,8 +67,13 @@ const init! = InitSystemMatrices()
 
 function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU())      
       linsolve!(sim.E,sim.sysetm_matrix,sim.source_vector,linearsolver)
-  #    sim.H =  sim( μⁱ∇ₛx  ) * sim.E
+#      sim.H =  sim( μⁱ∇ₛx  ) * sim.E
       return nothing
+end
+
+function (sim::Simulation)(::AdjointFDFDSolver,adjointsrc::AbstractVector; linearsolver::AbstractLinearSolver = LU())      
+     linsolve!(sim.E_adjoint,adjoint(sim.sysetm_matrix),sim.source_vector,linearsolver)
+     return nothing
 end
 #####################################################################
 

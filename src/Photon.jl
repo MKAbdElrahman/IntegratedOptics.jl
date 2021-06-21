@@ -1,5 +1,6 @@
 module Photon
 
+using Zygote: sensitivity
 using LinearAlgebra: getproperty
 using Base: Symbol, Float64
 using  LinearAlgebra

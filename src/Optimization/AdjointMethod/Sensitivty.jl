@@ -1,19 +1,12 @@
-export sensitivity
+export sensitivity!
 
 struct Sensitivity end
 
-const  sensitivity  = Sensitivity()
+const  sensitivity!  = Sensitivity()
 
-function (sim::Simulation)(::Sensitivity,obj::Function,ls::AbstractLinearSolver = LU())
-   # Ex,Ey,Ez = sim.Ex , sim.Ey , sim.Ez
-   #Aᵃ = adjoint(sim.A) 
-    #∂L∂Ex , ∂L∂Ey , ∂L∂Ez = gradient(obj,Ex,Ey,Ez)
-    #bᵃ = [∂L∂Ex[:] ; ∂L∂Ey[:] ; ∂L∂Ez[:]]
-    #xᵃ =  linsolve(Aᵃ,bᵃ,ls)
-    #sens = sim(convert_to_vector,:ϵᵣ) .* xᵃ .*  [ Ex[:] ; Ey[:]; Ez[:] ]
-    #(obj(Ex,Ey,Ez),sim(reshapefield,sens))
-end
 
-function (sim::Simulation)(::Sensitivity,obj::Function,sym::Symbol)
-    gradient(obj,sim)[1].x[sym]
+function (sim::Simulation)(::Sensitivity,objective_function::Function)
+    grad_E  = gradient(objective_function,sim)[1].x[:E]
+    sim(adjointsolve!,grad_E)
+    sim.sensitivity = sim(convert_to_vector,:ϵᵣ) .* sim.E .*  sim.E_adjoint 
 end

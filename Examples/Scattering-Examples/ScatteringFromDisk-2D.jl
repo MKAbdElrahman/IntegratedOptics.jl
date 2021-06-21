@@ -27,6 +27,10 @@ sim(setmaterial!,Silver,Disk)
 
  sim(init!)
  sim(solve!)
+ 
 
-sim(contourplot,:E, ẑ, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+using LinearAlgebra
+objective_function(sim) =  norm(sim(:E,ẑ))
+sim(sensitivity!,objective_function)
 
+sim(contourplot,:sensitivity,ẑ, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
