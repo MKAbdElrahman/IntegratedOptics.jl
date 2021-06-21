@@ -21,3 +21,16 @@ function (sim::Simulation)(::Curlₛ,gridtype::GridType)
         ]
 end	
 ###########################################################################
+
+
+function (sim::Simulation)(::μⁱCurl)
+  μi =  sim(convert_to_diagonal_matrix,:μᵣ)
+   μi  * sim(∇x, p̂)
+end
+
+
+ 
+function (sim::Simulation)(::μⁱCurlₛ)
+  μi =  sim(convert_to_diagonal_matrix,:μᵣ)
+  μi  * sim(∇ₛx, p̂)
+end	

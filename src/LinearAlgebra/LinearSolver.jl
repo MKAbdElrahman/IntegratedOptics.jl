@@ -1,22 +1,17 @@
-export using_direct_solver
-export using_gmres
-export using_bicgstabl
+export LU , GMRES , BICGSTAB
 
 abstract type AbstractLinearSolver end
-struct DirectSolver <: AbstractLinearSolver end
-const using_direct_solver = DirectSolver()
+abstract type DirectSolver <: AbstractLinearSolver end
+abstract type IterativeSolver <: AbstractLinearSolver end
 
-struct GMRES <: AbstractLinearSolver end
-const using_gmres = GMRES()
-
-struct BICGSTAB <: AbstractLinearSolver end
-const using_bicgstabl = BICGSTAB()
+struct LU  <:DirectSolver end
+struct GMRES  <: IterativeSolver end
+struct BICGSTAB  <: IterativeSolver end
 
 
-function linsolve(A::AbstractArray,b::AbstractVector,::DirectSolver)
- A \ b
+function linsolve(A::AbstractArray,b::AbstractVector,::LU)
+A \ b
 end
-
 
 function linsolve(A::AbstractArray,b::AbstractVector,::GMRES)
     gmres(A,b,verbose = true)

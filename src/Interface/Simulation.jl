@@ -29,7 +29,13 @@ Base.@kwdef mutable struct Simulation{Dim}
 
         e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> 1.0 + 0.0im , dimension(grid))
 
-		
+		Ex::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		Ey::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		Ez::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+
+		Hx::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		Hy::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		Hz::Array{CFloat,Dim} = zeros(CFloat,size(grid))
 	end
 	
 function Base.show(io::IO, sim::Simulation{Dim}) where {Dim}
@@ -62,6 +68,7 @@ end
 
 
 function (sim::Simulation)(sym::Symbol,dir::Direction) 
+
     !(sym === :ϵᵣ && x̂ == dir ) || return sim.ϵᵣ_xx
 	!(sym === :ϵᵣ && ŷ == dir ) || return sim.ϵᵣ_yy
 	!(sym === :ϵᵣ && ẑ == dir ) || return sim.ϵᵣ_zz
@@ -82,6 +89,16 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :Q && x̂ == dir ) || return sim.Q
 	!(sym === :Q && ŷ == dir ) || return sim.Q
 	!(sym === :Q && ẑ == dir ) || return sim.Q
+
+	!(sym === :E && x̂ == dir ) || return sim.Ex
+	!(sym === :E && ŷ == dir ) || return sim.Ey
+	!(sym === :E && ẑ == dir ) || return sim.Ez
+
+	!(sym === :H && x̂ == dir ) || return sim.Hx
+	!(sym === :H && ŷ == dir ) || return sim.Hy
+	!(sym === :H && ẑ == dir ) || return sim.Hz
+
+
 end
 
 include("Material.jl")

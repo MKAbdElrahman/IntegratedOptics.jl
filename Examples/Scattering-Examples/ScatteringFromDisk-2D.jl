@@ -6,7 +6,7 @@ using Photon
 Lx = 6 * λ; 
 Ly = 6 * λ;
 
-sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly) , spacing =  (λ/20,λ/20) ))
+sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly) , spacing =  (λ/40,λ/40) ))
 
 sim(setpml!,λ)
 
@@ -18,15 +18,35 @@ sim(contourplot,:J,ẑ, real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez
 sim(setTFSF! ,1.5λ)
 
 
-material = Material(ϵᵣ = 13.491 + 0.036730im )
+Silver = Material(ϵᵣ = 13.491 + 0.036730im )
 
 Disk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 
-sim(setmaterial!,material,Disk)
+sim(setmaterial!,Silver,Disk)
 
 sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 
 
-Ex,Ey,Ez  = sim(solve_with_FDFD,using_bicgstabl)
+sim(solve!)
 
-sim(contourplot,Ez, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+sim(contourplot,:Hy, abs ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

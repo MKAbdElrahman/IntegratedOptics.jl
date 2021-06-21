@@ -1,15 +1,17 @@
-export solve_with_FDFD
+export solve!
 
 
 struct FDFDSolver end
+const solve! = FDFDSolver()
 
-const solve_with_FDFD = FDFDSolver();
+
 
 
 struct Partial end
 struct Curl end
 struct CurlCurl end
 struct CurlμⁱCurl end
+struct μⁱCurl end
 
 
 
@@ -17,17 +19,20 @@ struct Partialₛ end
 struct Curlₛ end
 struct CurlₛCurlₛ end
 struct CurlₛμⁱCurlₛ end
+struct μⁱCurlₛ end
 
 const ∂ = Partial()
 const ∇x = Curl()
 const ∇x∇x = CurlCurl()
 const ∇xμⁱ∇x = CurlμⁱCurl()
+const μⁱ∇x =  μⁱCurl()
 
 
 const ∂ₛ = Partialₛ()
 const ∇ₛx = Curlₛ()
 const ∇ₛx∇ₛx = CurlₛCurlₛ()
 const ∇ₛxμⁱ∇ₛx = CurlₛμⁱCurlₛ()
+const μⁱ∇ₛx = μⁱCurlₛ()
 
 
 include("kron.jl")
@@ -51,12 +56,21 @@ const  tfsf = QTFSF();
 
 ######################################################################
 
-function (sim::Simulation)(::FDFDSolver, ls::AbstractLinearSolver)
+function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU()) 
      A = sim(system_matrix)
      b = sim(source_vector)
      Q = sim(tfsf)
-     sim(reshapefield,sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,ls) :   linsolve(A,b,ls))
-
+     xe = sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,linearsolver) :   linsolve(A,b,linearsolver)
+     xh =  sim( μⁱ∇ₛx  ) * xe
+     (Ex,Ey,Ez)  =  sim(reshapefield,xe)
+      sim.Ez = Ex
+      sim.Ez = Ey
+      sim.Ez = Ez
+      (Hx,Hy,Hz)  =  sim(reshapefield,xh)
+      sim.Hx = Hx
+      sim.Hy = Hy
+      sim.Hz = Hz
+  return nothing
 end
 #####################################################################
 
