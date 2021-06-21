@@ -29,13 +29,12 @@ Base.@kwdef mutable struct Simulation{Dim}
 
         e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> 1.0 + 0.0im , dimension(grid))
 
-		Ex::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		Ey::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		Ez::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		E::Vector{CFloat}   = zeros(CFloat,3*ncells(grid))
+		H::Vector{CFloat}   = zeros(CFloat,3*ncells(grid)) 
 
-		Hx::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		Hy::Array{CFloat,Dim} = zeros(CFloat,size(grid))
-		Hz::Array{CFloat,Dim} = zeros(CFloat,size(grid))
+		sysetm_matrix::SparseMatrixCSC{CFloat, Int64} = spzeros(CFloat,3*ncells(grid),3*ncells(grid))
+		source_vector::Vector{CFloat}   = zeros(CFloat,3*ncells(grid)) 
+
 	end
 	
 function Base.show(io::IO, sim::Simulation{Dim}) where {Dim}
@@ -90,13 +89,14 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :Q && ŷ == dir ) || return sim.Q
 	!(sym === :Q && ẑ == dir ) || return sim.Q
 
-	!(sym === :E && x̂ == dir ) || return sim.Ex
-	!(sym === :E && ŷ == dir ) || return sim.Ey
-	!(sym === :E && ẑ == dir ) || return sim.Ez
 
-	!(sym === :H && x̂ == dir ) || return sim.Hx
-	!(sym === :H && ŷ == dir ) || return sim.Hy
-	!(sym === :H && ẑ == dir ) || return sim.Hz
+	!(sym === :E && x̂ == dir ) || return  sim(ExtractReshape(),sim.E,x̂)
+	!(sym === :E && ŷ == dir ) || return  sim(ExtractReshape(),sim.E,ŷ)
+	!(sym === :E && ẑ == dir ) || return  sim(ExtractReshape(),sim.E,ẑ)
+
+	!(sym === :H && x̂ == dir ) || return  sim(ExtractReshape(),sim.H,x̂)
+	!(sym === :H && ŷ == dir ) || return  sim(ExtractReshape(),sim.H,ŷ)
+	!(sym === :H && ẑ == dir ) || return  sim(ExtractReshape(),sim.H,ẑ)
 
 
 end

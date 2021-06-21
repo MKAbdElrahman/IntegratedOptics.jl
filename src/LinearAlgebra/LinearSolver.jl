@@ -9,15 +9,15 @@ struct GMRES  <: IterativeSolver end
 struct BICGSTAB  <: IterativeSolver end
 
 
-function linsolve(A::AbstractArray,b::AbstractVector,::LU)
-A \ b
+function linsolve!(x::AbstractVector,A::AbstractArray,b::AbstractVector, ::LU)
+ldiv!(x, lu(A), b);
 end
 
-function linsolve(A::AbstractArray,b::AbstractVector,::GMRES)
-    gmres(A,b,verbose = true)
+function linsolve!(x::AbstractVector,A::AbstractArray,b::AbstractVector,::GMRES)
+gmres!(x,A,b,verbose = true)
 end
    
-function linsolve(A::AbstractArray,b::AbstractVector,::BICGSTAB)
-    bicgstabl(A,b,verbose = true)
+function linsolve!(x::AbstractVector,A::AbstractArray,b::AbstractVector,::BICGSTAB)
+bicgstabl!(x,A,b,verbose = true)
 end
    

@@ -1,4 +1,4 @@
-export solve!
+export solve! ,  init!
 
 
 struct FDFDSolver end
@@ -46,44 +46,45 @@ struct EpsI end
 const ϵᵣI = EpsI()
 
 struct SystemMatrix end
-const system_matrix = SystemMatrix()
+const system_matrix! = SystemMatrix()
 
 struct SourceVector end
-const source_vector = SourceVector()
+const source_vector! = SourceVector()
+
+struct TFSFSourceVector end
+const set_tfsf_source_vector! = TFSFSourceVector()
 
 struct QTFSF end
 const  tfsf = QTFSF();
 
+
+struct InitSystemMatrices end
+const init! = InitSystemMatrices()
+
 ######################################################################
 
-function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU()) 
-     A = sim(system_matrix)
-     b = sim(source_vector)
-     Q = sim(tfsf)
-     xe = sim.activate_tfsf ? linsolve(A,(Q*A - A*Q)*b ,linearsolver) :   linsolve(A,b,linearsolver)
-     xh =  sim( μⁱ∇ₛx  ) * xe
-     (Ex,Ey,Ez)  =  sim(reshapefield,xe)
-      sim.Ez = Ex
-      sim.Ez = Ey
-      sim.Ez = Ez
-      (Hx,Hy,Hz)  =  sim(reshapefield,xh)
-      sim.Hx = Hx
-      sim.Hy = Hy
-      sim.Hz = Hz
-  return nothing
+function (sim::Simulation)(::FDFDSolver; linearsolver::AbstractLinearSolver = LU())      
+      linsolve!(sim.E,sim.sysetm_matrix,sim.source_vector,linearsolver)
+  #    sim.H =  sim( μⁱ∇ₛx  ) * sim.E
+      return nothing
 end
 #####################################################################
 
 
 function (sim::Simulation)(::SystemMatrix)
-     sim(∇ₛxμⁱ∇ₛx) - (2pi/sim.λ₀)^2*sim(ϵᵣI)
+sim.sysetm_matrix =     sim(∇ₛxμⁱ∇ₛx) - (2pi/sim.λ₀)^2*sim(ϵᵣI)
 end	
   
 function (sim::Simulation)(::SourceVector)
-     sim(convert_to_vector,:J)
+sim.source_vector =  sim(convert_to_vector,:J)
 end	
   
-
+function (sim::Simulation)(::InitSystemMatrices)
+     sim(system_matrix!)
+     sim(source_vector!)
+     if sim.activate_tfsf  sim(set_tfsf_source_vector!)   end
+end	
+       
 ########################################################################
 function (sim::Simulation)(::EpsI)
      sim(convert_to_diagonal_matrix,:ϵᵣ)
@@ -93,3 +94,10 @@ function (sim::Simulation)(::QTFSF)
      sim(convert_to_diagonal_matrix,:Q)
 end	
 #########################################################################
+
+function (sim::Simulation)(::TFSFSourceVector)
+     Q = sim(tfsf)
+     A = sim.sysetm_matrix
+     b = sim.source_vector
+     sim.source_vector = (Q*A - A*Q) * b 
+end
