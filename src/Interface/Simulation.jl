@@ -1,7 +1,7 @@
 export Simulation
 include("Grid.jl")	
 
-export get, set!,add!
+export  set!,add!
 
 Base.@kwdef mutable struct Simulation{Dim}
 
@@ -22,7 +22,7 @@ Base.@kwdef mutable struct Simulation{Dim}
 		activate_tfsf::Bool = false
 
 		
-		ϵᵣ_xx::Array{CFloat,Dim}  = ones(CFloat,size(grid))
+		::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		ϵᵣ_yy::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		ϵᵣ_zz::Array{CFloat,Dim}  = ones(CFloat,size(grid))
 		
@@ -52,8 +52,6 @@ const set! = SimulationSetter()
 struct SimulationAdder end
 const add! = SimulationAdder()
 
-struct SimulationGetter end
-const get = SimulationGetter()
 
 
 function (sim::Simulation)(::SimulationAdder,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
