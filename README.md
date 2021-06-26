@@ -36,26 +36,6 @@ sim(setTFSF! ,1.5λ)
 Si = Material(ϵᵣ = 13.491 + 0.036730im )
 inDisk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 sim(setmaterial!,Si,inDisk)
-sim(init!)
 sim(solve!)
-
+sim(contourplot, :H ,x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 ```
-## Features List
-### Spaces
-* 1D, 2D, 3D
-### Materials
-* lossy and lossless isotropic and anistropic materials
-### Sources
-* planewave source
-* eigenmode source
-* custom source
-### TFSF
-- Ability to seperate total fields from scattered fields at any user defined regions
-### Perfect Macthed Layer (PML)
-* complex stretched PML
-### Solvers
-- direct solvers 
-- iterative solvers (GMRES and BICGSTABl)
-### Plots
-- line plots
-- contour plots
