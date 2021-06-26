@@ -1,9 +1,10 @@
 
 export slice
-struct SliceSimulation end
-const slice = SliceSimulation();
 
-function (sim::Simulation{Dim})(::SliceSimulation, dir::Direction{D}, p::NTuple{Dim,Real}) where {D,Dim}
+
+function slice end
+
+function (sim::Simulation{Dim})(::typeof(slice), dir::Direction{D}, p::NTuple{Dim,Real}) where {D,Dim}
 
 dirs = directions(sim.grid)
 maskdir =  dirs .!= fill(dir,Dim)

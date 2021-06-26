@@ -1,35 +1,34 @@
 export setTFSF!
 
-struct TFSF end	
-const  setTFSF! = TFSF()
+function  setTFSF! end
 
-function (sim::Simulation)(::TFSF, reg::Function, gridtype::GridType= p̂)
+function (sim::Simulation)(::typeof(setTFSF!), reg::Function, gridtype::GridType= p̂)
 	sim(set!,sim.Q,x -> true,reg, gridtype)	
     sim.activate_tfsf = true;
 end
-function (sim::Simulation)(::TFSF,dir::Direction{D},side::Low, thickness::Number,gridtype::GridType= p̂) where {D}		
+function (sim::Simulation)(::typeof(setTFSF!),dir::Direction{D},side::Low, thickness::Number,gridtype::GridType= p̂) where {D}		
     sim(set!,sim.Q,x -> true,x -> x[D] <= thickness, gridtype)		
     sim.activate_tfsf = true;
 end
 
-function (sim::Simulation)(::TFSF,dir::Direction{D},side::High, thickness::Number,gridtype::GridType= p̂) where {D}		
+function (sim::Simulation)(::typeof(setTFSF!),dir::Direction{D},side::High, thickness::Number,gridtype::GridType= p̂) where {D}		
     sim(set!,sim.Q,x -> true,x -> x[D] >= extent(sim.grid,dir)- thickness, gridtype)	
     sim.activate_tfsf = true;
 end
-function (sim::Simulation)(t::TFSF,dir::Direction{D}, thickness::Number,gridtype::GridType= p̂) where {D}	
-sim(t,dir,HIGH, thickness,gridtype)	
-sim(t,dir,LOW, thickness,gridtype)	
+function (sim::Simulation)(::typeof(setTFSF!),dir::Direction{D}, thickness::Number,gridtype::GridType= p̂) where {D}	
+sim(setTFSF!,dir,HIGH, thickness,gridtype)	
+sim(setTFSF!,dir,LOW, thickness,gridtype)	
 end
 
-function (sim::Simulation{1})(t::TFSF, thickness::Number,gridtype::GridType= p̂) 
-sim(t,x̂, thickness,gridtype)	
+function (sim::Simulation{1})(::typeof(setTFSF!), thickness::Number,gridtype::GridType= p̂) 
+sim(setTFSF!,x̂, thickness,gridtype)	
 end
-function (sim::Simulation{2})(t::TFSF, thickness::Number,gridtype::GridType= p̂) 
-sim(t,x̂, thickness,gridtype)	
-sim(t,ŷ, thickness,gridtype)			
+function (sim::Simulation{2})(::typeof(setTFSF!), thickness::Number,gridtype::GridType= p̂) 
+sim(setTFSF!,x̂, thickness,gridtype)	
+sim(setTFSF!,ŷ, thickness,gridtype)			
 end	
-function (sim::Simulation{3})(t::TFSF, thickness::Number,gridtype::GridType= p̂) 	
-sim(t,x̂, thickness,gridtype)	
-sim(t,ŷ, thickness,gridtype)	
-sim(t,ẑ, thickness,gridtype)				
+function (sim::Simulation{3})(::typeof(setTFSF!), thickness::Number,gridtype::GridType= p̂) 	
+sim(setTFSF!,x̂, thickness,gridtype)	
+sim(setTFSF!,ŷ, thickness,gridtype)	
+sim(setTFSF!,ẑ, thickness,gridtype)				
 end	

@@ -2,15 +2,10 @@ export setϵᵣ! ,  setμᵣ! , setmaterial!
 export Material
 export ϵ₁ , ϵ₂ , n , κ
 
-struct ϵᵣ end
-struct μᵣ end
 
-const  setϵᵣ! =  ϵᵣ()
-const  setμᵣ! =  μᵣ()
-
-
-struct SetMaterial end
-const setmaterial! = SetMaterial()
+function  setϵᵣ! end
+function  setμᵣ! end
+function  setmaterial! end
 
 struct Material{T1,T2,T3}
     ϵr_xx::T1
@@ -23,7 +18,7 @@ function Material( ; ϵᵣ::Number)
     Material(ϵᵣ,ϵᵣ,ϵᵣ)
 end
 
-function (sim::Simulation)(setmaterial!, mat::Material, region::Function)
+function (sim::Simulation)(::typeof(setmaterial!), mat::Material, region::Function)
     sim(setϵᵣ!,x̂,x -> mat.ϵr_xx,region)
     sim(setϵᵣ!,ŷ,x -> mat.ϵr_yy,region)
     sim(setϵᵣ!,ẑ,x -> mat.ϵr_zz,region)
@@ -43,11 +38,11 @@ function get_μ_comp(sim::Simulation{Dim},  dir::Direction{D}) where {D,Dim}
 	if D == 3 return sim.μᵣ_zz end
 end	
 
-function (sim::Simulation)(::ϵᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
+function (sim::Simulation)(::typeof(setϵᵣ!),dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType= p̂) 
 sim(set!, get_ϵ_comp(sim,  dir),val,reg,gridtype)	
 end		
 
-function (sim::Simulation)(::μᵣ,dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType = d̂) 
+function (sim::Simulation)(::typeof(setμᵣ!),dir::Direction,val::Function, reg::Function = (x -> true) , gridtype::GridType = d̂) 
 sim(set!, get_μ_comp(sim,  dir),val,reg,gridtype)	
 end		
 

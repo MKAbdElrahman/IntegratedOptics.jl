@@ -46,26 +46,24 @@ function Base.show(io::IO, sim::Simulation{Dim}) where {Dim}
         print(io, "A $(Dim)D Simulation is initialized.\n")
 end	
 
-struct SimulationSetter end
-const set! = SimulationSetter()
+function set! end
 
-struct SimulationAdder end
-const add! = SimulationAdder()
+function add! end
 
 
 
-function (sim::Simulation)(::SimulationAdder,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+function (sim::Simulation)(::typeof(add!),m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));
 	m[mask] .+= vals[mask];	
 end
 
-function (sim::Simulation)(::SimulationAdder,m::AbstractArray,vals::AbstractArray,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+function (sim::Simulation)(::typeof(add!),m::AbstractArray,vals::AbstractArray,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	m[mask] .+= vals[mask];	
 end
 
-function (sim::Simulation)(::SimulationSetter,m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+function (sim::Simulation)(::typeof(set!),m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));
 	m[mask] = vals[mask];	
