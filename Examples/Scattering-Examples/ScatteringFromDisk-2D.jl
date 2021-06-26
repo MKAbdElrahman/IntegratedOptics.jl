@@ -1,6 +1,5 @@
    
 using Photon
-import Photon: ExtractReshape
 
 λ = 1.55;
 
@@ -25,11 +24,6 @@ Disk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2
 
 sim(setmaterial!,Silver,Disk)
 
-#sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
-
-
-#ls = LinearSystem(sim)
-#x = solve(ls)
-#Ez = sim(ExtractReshape(),x,ẑ)
-
-sim(contourplot, :E ,ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
+sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
+sim(solve!)
+sim(contourplot, :H ,ŷ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")

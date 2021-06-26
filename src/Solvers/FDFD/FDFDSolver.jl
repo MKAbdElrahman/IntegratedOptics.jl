@@ -45,11 +45,11 @@ end
 
 function (sim::Simulation)(::typeof(solve!);linearsolver::AbstractLinearSolver = LU())
      e = solve(LinearSystem(sim),linearsolver = linearsolver)
-    sim.E_x = sim(ExtractReshape(),e,x̂)
-    sim.E_y = sim(ExtractReshape(),e,ŷ)
-    sim.E_z = sim(ExtractReshape(),e,ẑ)
+    sim.E_x = sim(extractreshape,e,x̂)
+    sim.E_y = sim(extractreshape,e,ŷ)
+    sim.E_z = sim(extractreshape,e,ẑ)
      h =  sim(μⁱ∇ₛx) * e
-    sim.H_x = sim(ExtractReshape(),h,x̂)
-    sim.H_y = sim(ExtractReshape(),h,ŷ)
-    sim.H_z = sim(ExtractReshape(),h,ẑ)
+    sim.H_x = sim(extractreshape,h,x̂)
+    sim.H_y = sim(extractreshape,h,ŷ)
+    sim.H_z = sim(extractreshape,h,ẑ)
 end

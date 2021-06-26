@@ -52,3 +52,28 @@ function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{3})
     return   kron(∂ ,Iy , Ix)
     end
 end	
+
+
+
+function extractor end
+function extractreshape end
+
+
+function (sim::Simulation)(::typeof(extractor), F::AbstractVector, dir::Direction{ND}) where ND
+    g = sim.grid
+    Nw = ncells(g);
+    f =  F[((ND-1)*Nw +1) : (ND*Nw)];
+end
+
+function (sim::Simulation)(::typeof(extractreshape), F::AbstractVector, dir::Direction)
+    f = sim(extractor,F,dir)
+        sim(reshape,f)
+end
+
+function (sim::Simulation)(::typeof(reshape), F::AbstractVector)
+    g = sim.grid
+    F = reshape(F,size(g));
+    return F
+end
+
+

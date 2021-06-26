@@ -24,6 +24,4 @@ inSphere(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2+(x[3]-Lz/2)^2)  <=  1.2
 
 sim(setmaterial!,material,inSphere)
 
-
-sim(init!)
 sim(solve!)

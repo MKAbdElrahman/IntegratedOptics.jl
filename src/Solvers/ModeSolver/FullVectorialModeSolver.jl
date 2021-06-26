@@ -17,7 +17,7 @@ end
 function (sim::Simulation)(ms::FullVectorialModeSolver)
     Ux = sim(∂,x̂,p̂) ; Vx =  sim(∂,x̂,d̂)
     Uy = sim(∂,ŷ,p̂) ; Vy =  sim(∂,ŷ,d̂)
-    ϵrx = sim.ϵᵣ_xx ; ϵry = sim.ϵᵣ_yy  ; ϵrz = sim.ϵᵣ_zz    
+      ϵrx = sim.ϵᵣ_xx ; ϵry = sim.ϵᵣ_yy  ; ϵrz = sim.ϵᵣ_zz    
     μrx = sim.μᵣ_xx ; μry = sim.μᵣ_yy  ; μrz = sim.μᵣ_zz    
     n = ncells(sim.grid)
     ω = (2pi/sim.λ₀)
