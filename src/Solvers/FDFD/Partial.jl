@@ -1,13 +1,18 @@
 
+function ∂  end
+function ∂ₛ end
+
+
+
   ########################################################################################## 
 
-function (sim::Simulation)(::Partial,dir::Direction,gridtype::GridType) 
+function (sim::Simulation)(::typeof(∂),dir::Direction,gridtype::GridType) 
     D(dir,sim.grid,sim.e⁻ⁱᵏᴸ,gridtype)	
 end	
  
  
    
-function (sim::Simulation)(::Partialₛ,dir::Direction,gridtype::GridType) 
+function (sim::Simulation)(::typeof(∂ₛ),dir::Direction,gridtype::GridType) 
        S =  get_S_comp(sim,  dir) 
        spdiagm((1 ./ S)[:])  *  sim(∂,dir,gridtype)
 end	

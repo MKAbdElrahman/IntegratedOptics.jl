@@ -1,13 +1,8 @@
 
-export convert_to_diagonal_matrix
-export convert_to_vector
-struct ConvertToDiagonalMatrix end
-struct ConvertToVector end
+function convert_to_diagonal_matrix end
+function convert_to_vector  end
 
-const convert_to_diagonal_matrix = ConvertToDiagonalMatrix()
-const convert_to_vector = ConvertToVector()
-
-function (sim::Simulation)(::ConvertToDiagonalMatrix,symbol::Symbol)
+function (sim::Simulation)(::typeof(convert_to_diagonal_matrix),symbol::Symbol)
 
     fx  =   spdiagm(sim(symbol,x̂)[:])
     fy  =   spdiagm(sim(symbol,ŷ)[:])
@@ -20,12 +15,40 @@ function (sim::Simulation)(::ConvertToDiagonalMatrix,symbol::Symbol)
              ]
 end
 
-function (sim::Simulation)(::ConvertToVector,symbol::Symbol)
+function (sim::Simulation)(::typeof(convert_to_vector),symbol::Symbol)
 
     fx  =   sim(symbol,x̂)[:]
     fy  =   sim(symbol,ŷ)[:]
     fz  =   sim(symbol,ẑ)[:]
     [fx ; fy ; fz]
+
 end
 
 
+function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{1})
+    return ∂
+end
+  
+function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{2}) 
+    if dir == x̂
+       Iy =  I(size(g,2)) 	
+       return kron(Iy , ∂)
+    elseif dir == ŷ
+       Ix =  I(size(g,1)) 	
+       return  kron(∂ , Ix)
+    end	
+end
+  
+function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{3}) 
+    nx,ny,nz = size(g)
+    Iz =  I(nz) ; Iy =  I(ny) ; Ix = I(nx)
+    if dir == x̂
+    return kron(Iz , Iy , ∂)
+    end
+    if dir == ŷ
+    return  kron(Iz ,∂ , Ix)
+    end
+    if dir == ẑ
+    return   kron(∂ ,Iy , Ix)
+    end
+end	

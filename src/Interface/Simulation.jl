@@ -32,14 +32,14 @@ Base.@kwdef mutable struct Simulation{Dim}
 
         e⁻ⁱᵏᴸ::NTuple{Dim,CFloat} = ntuple(i -> CFloat(1.0 + 0.0im) , dimension(grid))
 
-		E::Vector{CFloat}   = zeros(CFloat,3*ncells(grid))
-		H::Vector{CFloat}   = zeros(CFloat,3*ncells(grid)) 
+		E_x::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
+		E_y::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
+		E_z::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
 
-		sysetm_matrix::SparseMatrixCSC{CFloat} = spzeros(CFloat,3*ncells(grid),3*ncells(grid))
-		source_vector::Vector{CFloat}   = zeros(CFloat,3*ncells(grid)) 
+		H_x::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
+		H_y::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
+		H_z::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
 
-		E_adjoint::Vector{CFloat}   = zeros(CFloat,3*ncells(grid))
-		sensitivity::Vector{CFloat}  = zeros(CFloat,3*ncells(grid))
 	end
 	
 function Base.show(io::IO, sim::Simulation{Dim}) where {Dim}
@@ -101,18 +101,14 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :Q && ŷ == dir ) || return sim.Q
 	!(sym === :Q && ẑ == dir ) || return sim.Q
 
+	!(sym === :E && x̂ == dir ) || return sim.E_x
+	!(sym === :E && ŷ == dir ) || return sim.E_y
+	!(sym === :E && ẑ == dir ) || return sim.E_z
+	
+	!(sym === :H && x̂ == dir ) || return sim.H_x
+	!(sym === :H && ŷ == dir ) || return sim.H_y
+	!(sym === :H && ẑ == dir ) || return sim.H_z
 
-	!(sym === :E && x̂ == dir ) || return  sim(ExtractReshape(),sim.E,x̂)
-	!(sym === :E && ŷ == dir ) || return  sim(ExtractReshape(),sim.E,ŷ)
-	!(sym === :E && ẑ == dir ) || return  sim(ExtractReshape(),sim.E,ẑ)
-
-	!(sym === :H && x̂ == dir ) || return  sim(ExtractReshape(), sim( μⁱ∇ₛx  ) * sim.E,x̂)
-	!(sym === :H && ŷ == dir ) || return  sim(ExtractReshape(), sim( μⁱ∇ₛx  ) * sim.E,ŷ)
-	!(sym === :H && ẑ == dir ) || return  sim(ExtractReshape(), sim( μⁱ∇ₛx  ) * sim.E,ẑ)
-
-	!(sym === :sensitivity && x̂ == dir ) || return  sim(ExtractReshape(),  sim.sensitivity,x̂)
-	!(sym === :sensitivity && ŷ == dir ) || return  sim(ExtractReshape(),  sim.sensitivity,ŷ)
-	!(sym === :sensitivity && ẑ == dir ) || return  sim(ExtractReshape(),  sim.sensitivity,ẑ)
 
 end
 

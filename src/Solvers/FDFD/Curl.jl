@@ -1,6 +1,10 @@
+function ∇ₛx end
+function μⁱ∇ₛx end
+function ∇x  end
+function μⁱ∇x  end
 
-##########################################################################
-function (sim::Simulation)(::Curl,gridtype::GridType) 
+
+function (sim::Simulation)(::typeof(∇x),gridtype::GridType) 
     ∂x =   sim(∂, x̂,gridtype);
     ∂y =   sim(∂, ŷ,gridtype);
     ∂z =   sim(∂, ẑ,gridtype);
@@ -10,7 +14,7 @@ function (sim::Simulation)(::Curl,gridtype::GridType)
           -∂y    ∂x      O
         ]
 end
-function (sim::Simulation)(::Curlₛ,gridtype::GridType) 
+function (sim::Simulation)(::typeof(∇ₛx),gridtype::GridType) 
     ∂x =   sim(∂ₛ, x̂,gridtype);
     ∂y =   sim(∂ₛ, ŷ,gridtype);
     ∂z =   sim(∂ₛ, ẑ,gridtype);
@@ -20,17 +24,16 @@ function (sim::Simulation)(::Curlₛ,gridtype::GridType)
           -∂y    ∂x      O
         ]
 end	
-###########################################################################
 
 
-function (sim::Simulation)(::μⁱCurl)
+function (sim::Simulation)(::typeof(μⁱ∇x))
   μi =  sim(convert_to_diagonal_matrix,:μᵣ)
-   μi  * sim(∇x, p̂)
+  μi  * sim(∇x, p̂)
 end
 
 
  
-function (sim::Simulation)(::μⁱCurlₛ)
+function (sim::Simulation)(::typeof(μⁱ∇ₛx))
   μi =  sim(convert_to_diagonal_matrix,:μᵣ)
   μi  * sim(∇ₛx, p̂)
 end	

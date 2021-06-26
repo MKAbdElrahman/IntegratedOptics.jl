@@ -27,7 +27,9 @@ sim(setmaterial!,Silver,Disk)
 
 #sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 
- sim(init!)
- sim(solve!)
 
- sim(contourplot,  :E, ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
+#ls = LinearSystem(sim)
+#x = solve(ls)
+#Ez = sim(ExtractReshape(),x,ẑ)
+
+sim(contourplot, :E ,ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
