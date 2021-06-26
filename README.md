@@ -37,6 +37,6 @@ Si = Material(ϵᵣ = 13.491 + 0.036730im )
 inDisk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 sim(setmaterial!,Si,inDisk)
 sim(solve!)
-sim(contourplot, :H ,x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Hx")
-sim(contourplot, :E ,ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+sim(contourplot, :H ,x̂ , real ; title = "Hx")
+sim(contourplot, :E ,ẑ , real ; title = "Ez")
 ```
