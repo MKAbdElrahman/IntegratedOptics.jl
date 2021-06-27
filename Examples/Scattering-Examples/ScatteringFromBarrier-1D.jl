@@ -23,7 +23,6 @@ inBarrier(x) = abs(x[1] - 0.5Lx[1]) < 0.5λ
 sim(setmaterial!,material,inBarrier)
 sim(lineplot, :ϵᵣ,ẑ,real)
 
-sim(init!)
 sim(solve!)
 
 

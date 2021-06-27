@@ -92,24 +92,30 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :J && ŷ == dir ) || return sim.J_y
 	!(sym === :J && ẑ == dir ) || return sim.J_z
 
-	!(sym === :S && x̂ == dir ) || return sim.S_x
-	!(sym === :S && ŷ == dir ) || return sim.S_y
-	!(sym === :S && ẑ == dir ) || return sim.S_z
+	!(sym === :PML && x̂ == dir ) || return sim.S_x
+	!(sym === :PML && ŷ == dir ) || return sim.S_y
+	!(sym === :PML && ẑ == dir ) || return sim.S_z
 
 
 	!(sym === :Q && x̂ == dir ) || return sim.Q
 	!(sym === :Q && ŷ == dir ) || return sim.Q
 	!(sym === :Q && ẑ == dir ) || return sim.Q
 
+	# Electric Field
 	!(sym === :E && x̂ == dir ) || return sim.E_x
 	!(sym === :E && ŷ == dir ) || return sim.E_y
 	!(sym === :E && ẑ == dir ) || return sim.E_z
 	
+	# Magnetic Field
 	!(sym === :H && x̂ == dir ) || return sim.H_x
 	!(sym === :H && ŷ == dir ) || return sim.H_y
 	!(sym === :H && ẑ == dir ) || return sim.H_z
 
-
+	# Complex Poynting Vector
+	!(sym === :S && x̂ == dir ) || return  sim.E_y  .* conj.(sim.H_z) - sim.E_z .* conj.(sim.H_y)
+	!(sym === :S && ŷ == dir ) || return -(sim.E_x .* conj.(sim.H_z) - sim.E_z .* conj.(sim.H_x))
+	!(sym === :S && ẑ == dir ) || return  sim.E_x  .* conj.(sim.H_y) - sim.E_y .* conj.(sim.H_x)
+	
 end
 
 include("Material.jl")

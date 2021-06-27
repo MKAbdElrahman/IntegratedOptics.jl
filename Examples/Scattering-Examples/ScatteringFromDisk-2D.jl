@@ -1,4 +1,4 @@
-   
+using Revise
 using Photon
 
 λ = 1.55;
@@ -26,4 +26,7 @@ sim(setmaterial!,Silver,Disk)
 
 sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 sim(solve!)
-sim(contourplot, :H ,ŷ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
+sim(contourplot, :H ,x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Hx")
+sim(contourplot, :E ,ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+
+sim(contourplot,:S,x̂, real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
