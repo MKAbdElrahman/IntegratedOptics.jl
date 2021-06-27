@@ -23,10 +23,12 @@ Silver = Material(ϵᵣ = 4 )
 Disk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
 
 sim(setmaterial!,Silver,Disk)
-
 sim(contourplot,  :ϵᵣ, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ x")
 sim(solve!)
+
 sim(contourplot, :H ,x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Hx")
 sim(contourplot, :E ,ẑ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
 
-sim(contourplot,:S,x̂, real ; xlabel = "x-axis", ylabel = "y-axis", title = "Ez")
+sim(contourplot,:S,ŷ, real ; xlabel = "x-axis", ylabel = "y-axis", title = "Sy")
+
+

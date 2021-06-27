@@ -44,12 +44,8 @@ function solve(linearsystem::LinearSystem  ;  linearsolver::AbstractLinearSolver
 end
 
 function (sim::Simulation)(::typeof(solve!);linearsolver::AbstractLinearSolver = LU())
-     e = solve(LinearSystem(sim),linearsolver = linearsolver)
+    e = solve(LinearSystem(sim),linearsolver = linearsolver)
     sim.E_x = sim(extractreshape,e,x̂)
     sim.E_y = sim(extractreshape,e,ŷ)
     sim.E_z = sim(extractreshape,e,ẑ)
-     h = -1 / (im*2pi/sim.λ₀ ) .* sim(μⁱ∇ₛx) * e
-    sim.H_x = sim(extractreshape,h,x̂)
-    sim.H_y = sim(extractreshape,h,ŷ)
-    sim.H_z = sim(extractreshape,h,ẑ)
 end

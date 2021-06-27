@@ -36,10 +36,6 @@ Base.@kwdef mutable struct Simulation{Dim}
 		E_y::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
 		E_z::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
 
-		H_x::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
-		H_y::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
-		H_z::Array{CFloat,Dim}  = zeros(CFloat,size(grid))
-
 	end
 	
 function Base.show(io::IO, sim::Simulation{Dim}) where {Dim}
@@ -78,7 +74,22 @@ end
 
 
 
-function (sim::Simulation)(sym::Symbol,dir::Direction) 
+function ∂ end
+
+function (sim::Simulation{Dim})(::typeof(∂),dir::Direction{D}, F::AbstractArray,::GridType{:Primal}) where {Dim,D}
+    shifts = -1 .* (ntuple(identity,Val(Dim)) .== D)
+	if D > Dim return zeros(CFloat, size(sim.grid)) end
+    (circshift(F,shifts) - F) / spacing(sim.grid,dir)
+end
+
+function (sim::Simulation{Dim})(::typeof(∂),dir::Direction{D}, F::AbstractArray,::GridType{:Dual}) where {Dim,D}
+     shifts = 1 .* (ntuple(identity,Val(Dim)) .== D)
+	 if D > Dim return zeros(CFloat, size(sim.grid)) end
+    (circshift(F,shifts) - F) / spacing(sim.grid,dir)
+end
+
+
+function (sim::Simulation{Dim})(sym::Symbol,dir::Direction{D})  where {Dim,D}
 
     !(sym === :ϵᵣ && x̂ == dir ) || return sim.ϵᵣ_xx
 	!(sym === :ϵᵣ && ŷ == dir ) || return sim.ϵᵣ_yy
@@ -107,15 +118,14 @@ function (sim::Simulation)(sym::Symbol,dir::Direction)
 	!(sym === :E && ẑ == dir ) || return sim.E_z
 	
 	# Magnetic Field
-	!(sym === :H && x̂ == dir ) || return sim.H_x
-	!(sym === :H && ŷ == dir ) || return sim.H_y
-	!(sym === :H && ẑ == dir ) || return sim.H_z
+	!(sym === :H && x̂ == dir ) || return  -1 / (im*2pi/sim.λ₀ ) .* (sim(∂,ŷ,sim.E_z,p̂) - sim(∂,ẑ,sim.E_y,p̂)) 
+	!(sym === :H && ŷ == dir ) || return   1 / (im*2pi/sim.λ₀ ) .* (sim(∂,x̂,sim.E_z,p̂) - sim(∂,ẑ,sim.E_x,p̂)) 
+	!(sym === :H && ẑ == dir ) || return  -1 / (im*2pi/sim.λ₀ ) .* (sim(∂,x̂,sim.E_y,p̂) - sim(∂,ŷ,sim.E_x,p̂)) 
 
 	# Complex Poynting Vector
-	!(sym === :S && x̂ == dir ) || return  sim.E_y  .* conj.(sim.H_z) - sim.E_z .* conj.(sim.H_y)
-	!(sym === :S && ŷ == dir ) || return -(sim.E_x .* conj.(sim.H_z) - sim.E_z .* conj.(sim.H_x))
-	!(sym === :S && ẑ == dir ) || return  sim.E_x  .* conj.(sim.H_y) - sim.E_y .* conj.(sim.H_x)
-	
+	!(sym === :S && x̂ == dir ) || return  sim.E_y  .* conj.(sim(:H,ẑ)) - sim.E_z .* conj.(sim(:H,ŷ))
+	!(sym === :S && ŷ == dir ) || return -(sim.E_x .* conj.(sim(:H,ẑ)) - sim.E_z .* conj.(sim(:H,x̂)))
+	!(sym === :S && ẑ == dir ) || return  sim.E_x  .* conj.(sim(:H,ŷ)) - sim.E_y .* conj.(sim(:H,x̂))
 end
 
 include("Material.jl")
@@ -124,3 +134,4 @@ include("PML.jl")
 include("Sources/Source.jl")
 include("BC.jl")
 include("SliceSimulation.jl")
+
