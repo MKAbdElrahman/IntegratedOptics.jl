@@ -26,8 +26,7 @@ Photon.jl.
 
 ```@contents
 Pages = [
-    "tutorials/example_1.md",
-    "tutorials/example_2.md",
+    "tutorials/example_1.md"
     ]
 Depth = 2
 ```
@@ -39,7 +38,8 @@ and the general tools for analysis.
 
 ```@contents
 Pages = [
-    "basics/overview.md"
+    "basics/overview.md",
+    "basics/grid.md",
     ]
 Depth = 2
 ```
