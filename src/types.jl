@@ -1,6 +1,6 @@
 export x̂ , ŷ , ẑ
 export HIGH , LOW
-
+export EVERYWHERE
 
 struct Direction{T} end	
 const x̂ = Direction{1}()
@@ -25,3 +25,6 @@ const LOW = Low()
 const Float = typeof(0.0)
 const CFloat = Complex{Float}
 const NT = NTuple
+
+
+const EVERYWHERE = x -> true

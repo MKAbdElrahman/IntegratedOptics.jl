@@ -22,7 +22,7 @@ function LinearSystem(sim::Simulation)
      ∇ₛxμⁱ∇ₛx_M =  sim(∇ₛxμⁱ∇ₛx)
      ϵᵣ =    sim(convert_to_diagonal_matrix,:ϵᵣ)
      k₀²ϵᵣ = (2pi/sim.λ₀)^2 * ϵᵣ
-     A =    ∇ₛxμⁱ∇ₛx_M - k₀²ϵᵣ
+     A =     ∇ₛxμⁱ∇ₛx_M - k₀²ϵᵣ
      Q   =   sim(convert_to_diagonal_matrix,:Q)
      src  =   sim(convert_to_vector,:J)
      b =  sim.activate_tfsf ?   (Q*A - A*Q) * src   : src   

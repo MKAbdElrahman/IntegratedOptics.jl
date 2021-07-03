@@ -59,7 +59,7 @@ function (sim::Simulation)(::typeof(add!),m::AbstractArray,vals::AbstractArray,m
 	m[mask] .+= vals[mask];	
 end
 
-function (sim::Simulation)(::typeof(set!),m::AbstractArray,valueF::Function,maskF::Function =  (x -> true) ,gridtype::GridType = p̂)
+function (sim::Simulation)(::typeof(set!),m::AbstractArray,valueF::Function,maskF =  EVERYWHERE,gridtype::GridType = p̂)
 	mask = maskF.(Coordinates(sim.grid,gridtype))
 	vals = valueF.(Coordinates(sim.grid,gridtype));
 	m[mask] = vals[mask];	
@@ -128,6 +128,7 @@ function (sim::Simulation{Dim})(sym::Symbol,dir::Direction{D})  where {Dim,D}
 	!(sym === :S && ẑ == dir ) || return  sim.E_x  .* conj.(sim(:H,ŷ)) - sim.E_y .* conj.(sim(:H,x̂))
 end
 
+include("Geometry.jl")
 include("Material.jl")
 include("TFSF.jl")
 include("PML.jl")
