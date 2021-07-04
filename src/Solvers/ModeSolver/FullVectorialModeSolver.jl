@@ -4,11 +4,10 @@ struct FullVectorialModeSolver end
 
 const solve_for_modes = FullVectorialModeSolver()
 
-struct AttachMode end
-const attachmode! = AttachMode()
+function  attachmode! end
 
-function (sim::Simulation{Dim})(::AttachMode, mode  , src_comp, dir::Direction{D}, point::Tuple) where {Dim,D}
-    ind =   CartesianIndex(sim.grid,p̂,point)[D]
+function (sim::Simulation{Dim})(::typeof(attachmode!), mode  , src_comp, dir::Direction{D}, p::Real) where {Dim,D}
+    ind =   round(Int, p / spacing(sim.grid ,dir )  )
     input = selectdim(src_comp, D , ind)
     input .= mode
 end

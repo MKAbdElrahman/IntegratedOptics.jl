@@ -10,7 +10,7 @@ struct BICGSTAB  <: IterativeSolver end
 
 
 function linsolve!(x::AbstractVector,A::AbstractArray,b::AbstractVector, ::LU)
-ldiv!(x, factorize(A), b);
+ldiv!(x, lu(A), b);
 end
 
 function linsolve!(x::AbstractVector,A::AbstractArray,b::AbstractVector,::GMRES)

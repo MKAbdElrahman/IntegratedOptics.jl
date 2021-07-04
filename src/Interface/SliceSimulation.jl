@@ -4,7 +4,7 @@ export slice
 
 function slice end
 
-function (sim::Simulation{Dim})(::typeof(slice), dir::Direction{D}, p::NTuple{Dim,Real}) where {D,Dim}
+function (sim::Simulation{Dim})(::typeof(slice), dir::Direction{D}, p::Real) where {D,Dim}
 
 dirs = directions(sim.grid)
 maskdir =  dirs .!= fill(dir,Dim)
@@ -14,7 +14,7 @@ spac=  spacing(sim.grid)[maskdir]
 
 sim_wg = Simulation(λ₀ = sim.λ₀ ;  grid = Grid(extent = ext , spacing =  spac ))
 
-ind = CartesianIndex(sim.grid,p̂,p)[D]
+ind = round(Int,p / spacing(sim.grid,dir))
 
 sim_wg.J_x = selectdim(sim.J_x, D , ind)
 sim_wg.J_y = selectdim(sim.J_y, D , ind)
