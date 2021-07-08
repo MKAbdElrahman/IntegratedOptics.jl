@@ -16,7 +16,6 @@ sim = Simulation(λ₀ = 1.55 ;  grid = Grid(extent = (Lx,Ly) , spacing =  (dx,d
 sim(setpml!,1.0)
 
 ##########################################################
-
 ###################### BUILD DEVICE ######################
 #--------------------------------------------------------#
 sim(setbackground!,SiO2)
@@ -61,13 +60,12 @@ y_cut = 1.9
 sim_wg_out = sim(slice, ŷ , y_cut )
 eig_vals , eig_vecs = sim_wg_out(solve_for_modes)
 mode_te_out = sim_wg_out(Photon.extractreshape, eig_vecs[:,1] ,x̂)
-#mode_tm_in = sim_wg(Photon.extractreshape, eig_vecs[:,2] ,ŷ)
 sim_wg_out(lineplot,mode_te_out,real )
 output_mode_sim = deepcopy(sim)
 output_mode_sim(setbackground!,SiO2)
 output_mode_sim(setmaterial!,Si, Cuboid(((.5(Lx - w_wg_out),0),(.5(Lx + w_wg_out),Ly))))
 output_mode_sim(contourplot,:ϵᵣ,ẑ, real ; xlabel = "x-axis", ylabel = "y-axis", title = "ϵ")
-output_mode_sim(attachmode!,mode_te_in, output_mode_sim(:J,ẑ), ŷ , Ly-y_cut )
+output_mode_sim(attachmode!,mode_te_out, output_mode_sim(:J,ẑ), ŷ , Ly-y_cut )
 output_mode_sim(contourplot,:J,ẑ, real ; xlabel = "x-axis", ylabel = "y-axis", title = "Jz")
 output_mode_sim(solve!)
 output_mode_sim(contourplot,  :S, ŷ , real ; xlabel = "x-axis", ylabel = "y-axis", title = "Sy")
@@ -95,18 +93,40 @@ sim(contourplot,  :S, x̂ , real ; xlabel = "x-axis", ylabel = "y-axis", title =
 #############################################################
 #############################################################
 
-target = (target_x,target_y,target_z)
+obj = Photon.TargetObjective(target_x,target_y,target_z)
+optimizer = Descent(-1.0)
+
+import LinearAlgebra: norm, normalize
+using Gaston
+
+for i in 1:100
+f , ∇f  =    f_∇f(obj,sim)
+println(f)
+#update!(optimizer,sim(:ϵᵣ,x̂),∇[1])
+#update!(optimizer,sim(:ϵᵣ,ŷ),∇[2])
+sim(update!,optimizer, sim(:ϵᵣ,ẑ), normalize(∇f[3]),design_region)
 
 
-################
 
-opt = Optimization(sim,target)
-for i in 1:1000
+heatmap(range(sim.grid,x̂),range(sim.grid,ŷ),real.(sim(:ϵᵣ,ẑ)),Axes(
+    title = "'ϵᵣ'", 
+    palette = :tempo,
+    auto="fix",
+    size="ratio -1",
+    ))
 
-opt(gradient!)
-opt(apply!,Ascent(0.1))
-opt(update!,design_region)
-opt(boxconstraint!,design_region,1.45^2,3.64^2)
+save(term = "png", output = "./device.png",
+saveopts = "font 'Consolas,10' size 1280,900 lw 1 background 'white'")  
+    
+heatmap(range(sim.grid,x̂),range(sim.grid,ŷ),real.(sim(:E,ẑ)),Axes(
+    title = "'Ez'", 
+    palette = :balance,
+    auto="fix",
+    size="ratio -1",
+    ))
+
+save(term = "png", output = "./field.png",
+saveopts = "font 'Consolas,10' size 1280,900 lw 1 background 'white'")  
+
 
 end
-

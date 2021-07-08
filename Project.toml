@@ -5,10 +5,11 @@ version = "0.1.0"
 
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 Gnuplot = "dc211083-a33a-5b79-959f-2ff34033469d"
 IterativeSolvers = "42fd0dbc-a981-5370-80f2-aaf504508153"
+LineSearches = "d3d80556-e9d4-5f37-9878-2ab0fcc64255"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-Nabla = "49c96f43-aa6d-5a04-a506-44c7070ebe78"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]

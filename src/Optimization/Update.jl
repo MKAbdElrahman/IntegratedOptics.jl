@@ -1,16 +1,18 @@
 export update!
 
-function update! end
 
-function (opt::Optimization)(::typeof(update!),region)
-    s = mask(opt.sim,region)
-    opt.Δ .= s .* opt.Δ
-    opt.linsys.ϵᵣ .+=   opt.Δ
-    opt.linsys.A .=   opt.linsys.∇ₛxμⁱ∇ₛx - spdiagm(0 => (2pi/opt.sim.λ₀)^2 * opt.linsys.ϵᵣ)
 
+function update!(opt, x, x̄)
+    x .-= apply!(opt, x, x̄)
 end
 
-function mask(sim,maskF)
-    m =  vec(maskF.(Coordinates(sim.grid,p̂)))
-    return [m;m;m]
- end
+
+function (sim::Simulation)(::typeof(update!),opt ,m::AbstractArray,vals::AbstractArray,maskF = EVERYWHERE ,gridtype::GridType = p̂)
+	mask = maskF.(Coordinates(sim.grid,gridtype))
+	m[mask] .+= vals[mask];	
+    update!(opt,m[mask], vals[mask])
+end
+
+
+
+

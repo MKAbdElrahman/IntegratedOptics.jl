@@ -1,14 +1,21 @@
-export gradient!
+export f_∇f
 
-function gradient! end
+function f_∇f(objective::ObjectiveType,sim::Simulation)
+	linsys = LinearSystem(sim)
+	A = lu(linsys.A)
+	b = linsys.b
+	x = similar(b)
+	ldiv!(x, A , b)
+	x_adj = similar(b)
+    ldiv!(x_adj, transpose(A), adjoint_src(objective))
 
-function (opt::Optimization)(::typeof(gradient!))
-    F = lu(opt.linsys.A)
-    # forward problem
-    ldiv!(opt.x, F , opt.linsys.b)
-    # adjoint problem
-    ldiv!(opt.x_adj, transpose(F), opt.∂L∂x)
-    opt.Δ .= real.(opt.x .* opt.x_adj) 
-    opt.Δ .= opt.Δ /  findmax(real.(opt.Δ))[1]
+    ∇ = normalize(2 * (2pi/sim.λ₀)^2 * real(x .* x_adj))
+
+    ∇ϵx = sim(extractreshape,∇,x̂)
+    ∇ϵy = sim(extractreshape,∇,ŷ)
+    ∇ϵz = sim(extractreshape,∇,ẑ)
+
+    sim.E = x
+	return objective_value(objective,x) , Dict([(x̂, ∇ϵx), (ŷ, ∇ϵy),(ẑ,∇ϵz)])
+
 end
-

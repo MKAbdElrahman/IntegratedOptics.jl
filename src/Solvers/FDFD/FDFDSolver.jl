@@ -1,9 +1,6 @@
 export solve! 
-export solve
 
 export LinearSystem
-
-
 
 include("Utils.jl")
 include("Partial.jl")
@@ -31,21 +28,8 @@ end
 
 
 
-function solve!(x::AbstractVector,linearsystem::LinearSystem ; linearsolver::AbstractLinearSolver = LU())  
-      linsolve!(x,linearsystem.A,linearsystem.b,linearsolver)
-      return nothing
-end
-
-
-function solve(linearsystem::LinearSystem  ;  linearsolver::AbstractLinearSolver = LU()) 
-     x = similar(linearsystem.b) 
-     linsolve!(x,linearsystem.A,linearsystem.b,linearsolver)
-     return x
-end
-
+function solve! end
 function (sim::Simulation)(::typeof(solve!);linearsolver::AbstractLinearSolver = LU())
-    e = solve(LinearSystem(sim),linearsolver = linearsolver)
-    sim.E_x = sim(extractreshape,e,x̂)
-    sim.E_y = sim(extractreshape,e,ŷ)
-    sim.E_z = sim(extractreshape,e,ẑ)
+    ls =  LinearSystem(sim)
+    linsolve!(sim.E,ls.A,ls.b,linearsolver)
 end

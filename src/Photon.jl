@@ -2,7 +2,7 @@ module Photon
 
 
 using  LinearAlgebra: getproperty, TransposeAbsVec
-using  Base: Symbol, Float64
+using  Base: Symbol, Float64, strcat
 using  LinearAlgebra
 using  SparseArrays
 using  Arpack 
