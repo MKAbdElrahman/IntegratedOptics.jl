@@ -1,4 +1,4 @@
-export Descent, Momentum , Nesterov , RMSProp
+export Descent, Momentum , Nesterov , RMSProp , ADAM
 
 const ϵ = 1e-8
 
@@ -69,4 +69,30 @@ function apply!(o::RMSProp, x, Δ)
   acc = get!(() -> zero(x), o.acc, x)::typeof(x)
   @. acc = ρ * acc + (1 - ρ) * Δ^2
   @. Δ *= η / (√acc + ϵ)
+end
+
+
+
+
+mutable struct ADAM <: AbstractOptimiser
+  eta::Float64
+  beta::Tuple{Float64,Float64}
+  state::IdDict
+end
+
+ADAM(η = 0.001, β = (0.9, 0.999)) = ADAM(η, β, IdDict())
+
+function apply!(o::ADAM, x, Δ)
+  η, β = o.eta, o.beta
+
+  mt, vt, βp = get!(o.state, x) do
+      (zero(x), zero(x), Float64[β[1], β[2]])
+  end :: Tuple{typeof(x),typeof(x),Vector{Float64}}
+
+  @. mt = β[1] * mt + (1 - β[1]) * Δ
+  @. vt = β[2] * vt + (1 - β[2]) * Δ^2
+  @. Δ =  mt / (1 - βp[1]) / (√(vt / (1 - βp[2])) + ϵ) * η
+  βp .= βp .* β
+
+  return Δ
 end
