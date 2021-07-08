@@ -1,7 +1,3 @@
-export get
-
-function get end
-
 function (sim::Simulation)(::typeof(get), sym::Symbol, dir::Direction{D}; reshaped::Bool = true)  where D
 	F = getproperty(sim,sym)
 	Nw = ncells(sim.grid);	
