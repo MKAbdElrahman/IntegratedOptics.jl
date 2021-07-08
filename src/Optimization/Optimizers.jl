@@ -1,6 +1,11 @@
-export Descent, Momentum , Nesterov
+export Descent, Momentum , Nesterov , RMSProp
+
+const ϵ = 1e-8
 
 abstract type AbstractOptimiser end
+
+
+
 mutable struct Descent <: AbstractOptimiser
   eta::Float64
 end
@@ -46,4 +51,22 @@ function apply!(o::Nesterov, x, Δ)
   d = @. ρ^2 * v - (1+ρ) * η * Δ
   @. v = ρ*v - η*Δ
   @. Δ = -d
+end
+
+
+
+
+mutable struct RMSProp <: AbstractOptimiser
+  eta::Float64
+  rho::Float64
+  acc::IdDict
+end
+
+RMSProp(η = 0.001, ρ = 0.9) = RMSProp(η, ρ, IdDict())
+
+function apply!(o::RMSProp, x, Δ)
+  η, ρ = o.eta, o.rho
+  acc = get!(() -> zero(x), o.acc, x)::typeof(x)
+  @. acc = ρ * acc + (1 - ρ) * Δ^2
+  @. Δ *= η / (√acc + ϵ)
 end
