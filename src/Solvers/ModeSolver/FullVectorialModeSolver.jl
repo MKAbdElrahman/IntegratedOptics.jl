@@ -1,10 +1,10 @@
 export solve_for_modes , attachmode!
 
-struct FullVectorialModeSolver end
 
-const solve_for_modes = FullVectorialModeSolver()
+function solve_for_modes end
 
 function  attachmode! end
+
 
 function (sim::Simulation{Dim})(::typeof(attachmode!), mode  , src_comp, dir::Direction{D}, p::Real) where {Dim,D}
     ind =   round(Int, p / spacing(sim.grid ,dir )  )
@@ -13,10 +13,10 @@ function (sim::Simulation{Dim})(::typeof(attachmode!), mode  , src_comp, dir::Di
 end
 
 
-function (sim::Simulation)(ms::FullVectorialModeSolver)
+function (sim::Simulation)(::typeof(solve_for_modes); solver = EigArpack(), args... )
     Ux = sim(∂,x̂,p̂) ; Vx =  sim(∂,x̂,d̂)
     Uy = sim(∂,ŷ,p̂) ; Vy =  sim(∂,ŷ,d̂)
-      ϵrx = sim.ϵᵣ_xx ; ϵry = sim.ϵᵣ_yy  ; ϵrz = sim.ϵᵣ_zz    
+    ϵrx = sim.ϵᵣ_xx ; ϵry = sim.ϵᵣ_yy  ; ϵrz = sim.ϵᵣ_zz    
     μrx = sim.μᵣ_xx ; μry = sim.μᵣ_yy  ; μrz = sim.μᵣ_zz    
     n = ncells(sim.grid)
     ω = (2pi/sim.λ₀)
@@ -30,5 +30,5 @@ function (sim::Simulation)(ms::FullVectorialModeSolver)
     S = c * [-d(μrx) O; O d(μry)]+(1/c)*[Uy*iϵz*Vy -Uy*iϵz*Vx; Ux*iϵz*Vy  -Ux*iϵz*Vx ]
 
     A = -S*L 
-    eigs(A, which = :LR)
+    eigsolve(A, solver ; args... )
 end

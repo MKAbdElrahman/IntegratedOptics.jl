@@ -24,3 +24,5 @@ function (sim::Simulation)(::typeof(gradualbinarize!),m::AbstractArray,rng,δ,ma
         if real(rng[2] - m[i]) < δ && mask[i]  m[i] = rng[2] end
     end
 end
+
+

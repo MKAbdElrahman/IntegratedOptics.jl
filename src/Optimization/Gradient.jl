@@ -1,13 +1,10 @@
 export f_∇f
 
-function f_∇f(objective::ObjectiveType,sim::Simulation)
+function f_∇f(objective::ObjectiveType,sim::Simulation ; solver  = LU() , args...)
 	linsys = LinearSystem(sim)
-	A = lu(linsys.A)
-	b = linsys.b
-	x = similar(b)
-	ldiv!(x, A , b)
-	x_adj = similar(b)
-    ldiv!(x_adj, transpose(A), adjoint_src(objective))
+	A ,b = linsys.A , linsys.b
+	
+    x , x_adj = linsolve(A,b,adjoint_src(objective), solver ; args...)
 
     ∇ = normalize(2 * (2pi/sim.λ₀)^2 * real(x .* x_adj),Inf)
 

@@ -29,7 +29,7 @@ end
 
 
 function solve! end
-function (sim::Simulation)(::typeof(solve!);linearsolver::AbstractLinearSolver = LU())
+function (sim::Simulation)(::typeof(solve!); solver = LU(), args...)
     ls =  LinearSystem(sim)
-    linsolve!(sim.E,ls.A,ls.b,linearsolver)
+    linsolve!(sim.E,ls.A,ls.b,solver;args...)
 end
