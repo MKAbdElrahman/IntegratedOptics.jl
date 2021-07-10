@@ -1,5 +1,4 @@
 using Photon
-
 ######################
 # Plot Options
 ϵ_axes = Axes(title = "'ϵᵣ'",xlabel = "'x'", ylabel = "'y'", palette = :tempo, auto = "fix",size =" ratio -1")
@@ -93,20 +92,27 @@ sim(solve!)
 #############################################################
 # Toplogy Optimization 
 #######################################
-# optimizer
+# Optimization Settings
 obj =TargetObjective(target_x,target_y,target_z)
-optimizer = ADADelta(1)
-##########################################
-#Filtering 
+optimizer = Descent(1.0)
 using ImageFiltering
-kernel = Kernel.gaussian(1.5)
+kernel = Kernel.gaussian(2)
+ϵ_limits = (1.45^2,3.64^2)
+Nt = 100
+binarization_rate(i) =  0.5* i * -(-(ϵ_limits...))/Nt
 ###########################################
-#Optimization Loop
-for i in 1:100
-    f , ∇f  =  f_∇f(obj,sim)
-    println("iter:$(i)",":","\t",f)
+# Optimization Loop
+for i in 1:Nt
+    f , ∇f  =  f_∇f(obj,sim,solver = LU())
     sim(update!,optimizer, sim(:ϵᵣ,ẑ), imfilter(∇f[ẑ], kernel),design_region)
-    sim(boxconstraint!,sim(:ϵᵣ,ẑ),(1.45^2,3.64^2),design_region)
-    sim(gradualbinarize!,sim(:ϵᵣ,ẑ),(1.45^2,3.64^2),0.5*i * (-1.45^2 + 3.64^2)/100,design_region)
+    sim(boxconstraint!,sim(:ϵᵣ,ẑ),ϵ_limits,design_region)
+    sim(gradualbinarize!,sim(:ϵᵣ,ẑ),ϵ_limits,binarization_rate(i),design_region)
+   #### 
     display(sim(HeatMap,  :ϵᵣ, ẑ,axes =ϵ_axes ))
+    trans = sum(real.(sim(:S,ŷ,((x̂,2,4),(ŷ,2,2))))) / sum(real.(sim(:S,x̂,((x̂,2,2),(ŷ,2,4))))) 
+    println("iter:$(i)",": ",trans)
+   ####
 end
+
+
+

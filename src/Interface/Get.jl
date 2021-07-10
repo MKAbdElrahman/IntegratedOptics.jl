@@ -43,3 +43,9 @@ function (sim::Simulation{Dim})(sym::Symbol,dir::Direction{D})  where {Dim,D}
 	!(sym === :S && ŷ == dir ) || return -(sim(:E,x̂) .* conj.(sim(:H,ẑ)) - sim(:E,ẑ) .* conj.(sim(:H,x̂)))
 	!(sym === :S && ẑ == dir ) || return  sim(:E,x̂)  .* conj.(sim(:H,ŷ)) - sim(:E,ŷ) .* conj.(sim(:H,x̂))
 end
+
+
+function (sim::Simulation{Dim})(sym::Symbol,dir::Direction,r::Tuple,gt::GridType = p̂)  where {Dim}
+	inds = CartesianIndices(gt,sim.grid,r)
+	return  sim(sym,dir)[inds]
+end
