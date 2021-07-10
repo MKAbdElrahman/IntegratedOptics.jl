@@ -18,25 +18,3 @@ To load the package, use the command:
 ```julia
 using Photon
 ```
-## Quick Overview
-```julia
-using Photon
-
-λ = 1.55;
-
-Lx = 6 * λ; 
-Ly = 6 * λ;
-
-sim = Simulation(λ₀ = λ ;  grid = Grid(extent = (Lx,Ly) , spacing =  (λ/40,λ/40) ))
-
-sim(setpml!,λ)
-sim(setsrc!, PlaneWave(k̂ = (0,2pi/λ), ê = (0,0,1)))
-sim(setTFSF! ,1.5λ)
-
-Si = Material(ϵᵣ = 13.491 + 0.036730im )
-inDisk(x) = sqrt((x[1]-Lx/2)^2 + (x[2]-Ly/2)^2)  <=  1.2 
-sim(setmaterial!,Si,inDisk)
-sim(solve!)
-sim(contourplot, :H ,x̂ , real ; title = "Hx")
-sim(contourplot, :E ,ẑ , real ; title = "Ez")
-```
