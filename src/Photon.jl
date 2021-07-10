@@ -1,6 +1,7 @@
 module Photon
 
 
+using LinearAlgebra: similar
 using  LinearAlgebra
 using  SparseArrays
 

@@ -1,12 +1,11 @@
-
 export Grid, Coordinate ,Coordinates , dimension , extent , spacing , ncells , range 
 export directions
 
 
 struct Grid{N}
-    extent::NT{N,Float}
-    spacing::NT{N,Float}
-	size::NT{N,Int}	
+    extent::NTuple{N,Float}
+    spacing::NTuple{N,Float}
+	size::NTuple{N,Int}	
 end
 	
 function  Grid(; extent ,  spacing)
@@ -14,7 +13,7 @@ function  Grid(; extent ,  spacing)
          throw(error("spacing and extent must have equal length"))
          N = length(extent)
 		 size = round.(Int,extent ./ spacing)
-return   Grid(NT{N,Float}(extent),NT{N,Float}(spacing),NT{N,Int}(size))
+return   Grid(NTuple{N,Float}(extent),NTuple{N,Float}(spacing),NTuple{N,Int}(size))
 end
 	
 function Base.show(io::IO, g::Grid)
@@ -76,7 +75,7 @@ The function doesnot chack for being inside the grid.
 """
 function Coordinate(g::Grid ,::GridType{:Dual},Ind::CartesianIndex)
 	δ =  spacing(g)
-	Ind.I .* δ  .+  0.5 .* spacing(g) 
+	(Ind.I .- 1)  .* δ  .+  0.5 .* δ 
 end	
 """
 	Coordinate(g::Grid , ::GridType{:Primal}, Ind::CartesianIndex)
@@ -87,37 +86,39 @@ The function doesnot chack for being inside the grid.
 """
 function Coordinate(g::Grid , ::GridType{:Primal}, Ind::CartesianIndex)
 	δ =  spacing(g)
-	Ind.I .* δ  
+	(Ind.I .- 1) .* δ  
 end
 
-""" 
-	CartesianIndex(g::Grid{ND},::GridType{:Primal},  coordinate::NTuple{ND,Number})    where ND
-	
-Returns the equivalent priaml `CartesianIndex` of a coordinate.
+_ind(gt::GridType,g::Grid{ND},coor::NTuple{ND,Number}) where ND =  ntuple(i-> _ind(gt,g,coor[i],Direction{i}()),ND)
+_ind(::GridType{:Dual},g::Grid,coordinate::Number,dir::Direction) =  1 + round(Int,(coordinate - 0.5 .* spacing(g,dir))  ./ spacing(g,dir))	
+_ind(::GridType{:Primal},g::Grid,coordinate::Number, dir::Direction) =  1 + round(Int,coordinate / spacing(g,dir))		
 
-"""
-	
-
-function Base.CartesianIndex(g::Grid{ND},::GridType{:Primal},  coordinate::NTuple{ND,Number}) where ND
-	CartesianIndex(round.(Int,coordinate ./ spacing(g)))
-end
-
-"""
-	CartesianIndex(g::Grid{ND},::GridType{:Dual},  coordinate::NTuple{ND,Number}) where ND
-
-Returns the equivalent dual`CartesianIndex` of a coordinate.
-"""	
-function Base.CartesianIndex(g::Grid{ND},::GridType{:Dual},  coordinate::NTuple{ND,Number}) where ND
- CartesianIndex(round.(Int,(coordinate .- 0.5 .* spacing(g))  ./ spacing(g)))
+function Base.CartesianIndex(g::Grid{ND},gt::GridType,coordinate::NTuple{ND,Number}) where ND
+ 	CartesianIndex(_ind(gt,g,coordinate))		
 end		
-	
 
+function Base.CartesianIndex(g::Grid{ND},gt::GridType,coordinate::Real,dir::Direction) where ND
+ 	CartesianIndex(_ind(gt,g,coordinate,dir))		
+end	
+
+# FIXME 	
 function Base.CartesianIndices(g::Grid{ND},dir::Direction{D}, r::UnitRange{Int}) where {ND,D}
-    CartesianIndices(ntuple(i -> (D == i) ? r : size(g,i), ND))	
+	selectdim(CartesianIndices(g),D,r)
+end	
+#####
+	
+function _convert2ind(gt::GridType,r::Tuple{Direction{D},Real,Real},g::Grid{N}) where {N,D}
+	a,b = r[2],r[3] ; ax = r[1]
+	ia = _ind(gt,g,a,ax)
+	ib = _ind(gt,g,b,ax)
+	return(ia:ib)
+end	
+function Base.CartesianIndices(gt::GridType,g::Grid{N},r) where {N}
+	 inds = [_convert2ind(gt, r[i],g) for i in 1:N]
+	CartesianIndices((inds...,))
 end
 
-
-
+	
 directions(g::Grid{1}) = (x̂,)
 directions(g::Grid{2}) = (x̂,ŷ) 
-directions(g::Grid{3}) = (x̂,ŷ,ẑ)           
+directions(g::Grid{3}) = (x̂,ŷ,ẑ)   
