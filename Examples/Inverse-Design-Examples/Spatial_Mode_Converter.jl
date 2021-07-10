@@ -9,14 +9,14 @@ Ez_axes = Axes(title = "'Ez'",xlabel = "'x'", ylabel = "'y'", palette = :balance
 ######################## MATERIALS ########################
 Si =   Material(ϵᵣ = 3.64^2 )
 SiO2 = Material(ϵᵣ = 1.45^2 )
-Fg = Material(ϵᵣ = .6*(1.45^2 + 3.46^2) )
+Fg = Material(ϵᵣ = .8*(1.45^2 + 3.46^2) )
 ##########################################################
 ######################## SIMULATION #######################
 λ₀ = 1.55
 Lx , Ly =  λ₀ .* (4 , 3)
 n_max = 3.64 
 n_min = 1.45 
-dx , dy = (λ₀/15/n_max) .* (1, 1)
+dx , dy = (λ₀/18/n_max) .* (1, 1)
 sim = Simulation(λ₀ = 1.55 ;  grid = Grid(extent = (Lx,Ly) , spacing =  (dx,dy) ))
 sim(setpml!,1.0)
 ##########################################################
@@ -97,9 +97,9 @@ sim(solve!)
 #######################################
 # Optimization Settings
 obj =TargetObjective(target_x,target_y,target_z)
-optimizer = ADAGrad()
+optimizer = ADAGrad(1)
 using ImageFiltering
-kernel = Kernel.gaussian(1)
+kernel = Kernel.gaussian(3)
 ϵ_limits = (1.45^2,3.64^2)
 Nt = 100
 binarization_rate(i) =  0.5* i * -(-(ϵ_limits...))/Nt
@@ -108,6 +108,7 @@ binarization_rate(i) =  0.5* i * -(-(ϵ_limits...))/Nt
 for i in 1:Nt
     f , ∇f  =  f_∇f(obj,sim,solver = LU())
     sim(update!,optimizer, sim(:ϵᵣ,ẑ), imfilter(∇f[ẑ], kernel),design_region)
+
     sim(boxconstraint!,sim(:ϵᵣ,ẑ),ϵ_limits,design_region)
     sim(gradualbinarize!,sim(:ϵᵣ,ẑ),ϵ_limits,binarization_rate(i),design_region)
    #### 
