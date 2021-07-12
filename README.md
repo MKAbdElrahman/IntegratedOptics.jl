@@ -16,5 +16,5 @@ Pkg.add(url = "https://github.com/MKAbdElrahman/IntegratedOptics.jl")
 To load the package, use the command:
 
 ```julia
-using Photon
+using IntegratedOptics
 ```
