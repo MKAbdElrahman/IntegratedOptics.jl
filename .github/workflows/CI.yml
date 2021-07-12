@@ -55,9 +55,9 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using Photon
-            DocMeta.setdocmeta!(Photon, :DocTestSetup, :(using Photon); recursive=true)
-            doctest(Photon)'
+            using IntegratedOptics
+            DocMeta.setdocmeta!(IntegratedOptics, :DocTestSetup, :(using Photon); recursive=true)
+            doctest(IntegratedOptics)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
