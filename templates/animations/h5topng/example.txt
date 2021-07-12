@@ -1,0 +1,4 @@
+h5topng -t 45:300 -R -Zc dkbluered -a yarg -A eps-000000000.h5 ez.h5 -a inferno:0.5
+
+# this will the convert the output set of images to a gif animation
+convert ez.t*.png ez.gif

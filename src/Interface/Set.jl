@@ -6,3 +6,9 @@ function (sim::Simulation)(::typeof(set!),m::AbstractArray,valueF::Function,mask
 	m[mask] = vals[mask];	
 end
 
+
+function (sim::Simulation)(::typeof(set!),m::AbstractArray,vals::AbstractArray,maskF =  EVERYWHERE,gridtype::GridType = p̂)
+	mask = maskF.(Coordinates(sim.grid,gridtype))
+	m[mask] = vals[mask];	
+end
+

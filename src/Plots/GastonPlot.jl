@@ -1,13 +1,13 @@
 export HeatMap ,saveplot , LinePlot, Axes
 
 
-import Gaston: plot, heatmap , Axes
+import Gaston: plot, heatmap , Axes , save
 
 
 function saveplot end
 saveoptions =  "font 'Consolas,10' size 1280,900 lw 1 background 'white'"
 function (sim::Simulation)(::typeof(saveplot);term = "png",output = "./figure.png",saveopts = saveoptions)
-    Gaston.save(term = term , output = output,saveopts = saveopts)
+    save(term = term , output = output,saveopts = saveopts)
 end
 
 function HeatMap end
