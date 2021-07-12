@@ -15,6 +15,7 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Arpack = "0.5"
 Gaston = "1"
 IterativeSolvers = "0.9"
+HDF5 = "0.15.5"
 julia = "1.6"
 
 [extras]
