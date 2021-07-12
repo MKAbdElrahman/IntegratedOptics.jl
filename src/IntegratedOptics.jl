@@ -1,7 +1,6 @@
-module Photon
+module IntegratedOptics
 
 
-using LinearAlgebra: similar
 using  LinearAlgebra
 using  SparseArrays
 

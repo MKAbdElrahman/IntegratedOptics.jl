@@ -1,6 +1,6 @@
-using Photon
+using IntegratedOptics
 using Test
 
-@testset "Photon.jl" begin
+@testset "IntegratedOptics.jl" begin
     # Write your tests here.
 end

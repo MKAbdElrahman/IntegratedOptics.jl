@@ -1,17 +1,17 @@
 push!(LOAD_PATH,"../src/")
-using Photon
+using IntegratedOptics
 using Documenter
 
-DocMeta.setdocmeta!(Photon, :DocTestSetup, :(using Photon); recursive=true)
+DocMeta.setdocmeta!(Photon, :DocTestSetup, :(using IntegratedOptics); recursive=true)
 
 makedocs(;
     modules=[Photon],
     authors="Mohamed Kamal AbdElrahman",
-    repo="https://github.com/MKAbdElrahman/Photon.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/MKAbdElrahman/IntegratedOptics.jl/blob/{commit}{path}#{line}",
     sitename="Photon.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://MKAbdElrahman.github.io/Photon.jl",
+        canonical="https://MKAbdElrahman.github.io/IntegratedOptics.jl",
         assets=String[],
     ),
     pages=[
@@ -20,5 +20,5 @@ makedocs(;
 )
 
 deploydocs(;devbranch = "main",
-    repo="github.com/MKAbdElrahman/Photon.jl",
+    repo="github.com/MKAbdElrahman/IntegratedOptics.jl",
 )

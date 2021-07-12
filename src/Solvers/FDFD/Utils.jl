@@ -1,3 +1,6 @@
+export extractor, extractreshape
+
+
 
 function convert_to_diagonal_matrix end
 function convert_to_vector  end
@@ -52,7 +55,6 @@ function Base.kron(∂::SparseMatrixCSC, dir::Direction, g::Grid{3})
     return   kron(∂ ,Iy , Ix)
     end
 end	
-
 
 
 function extractor end

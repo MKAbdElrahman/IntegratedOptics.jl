@@ -1,4 +1,4 @@
-using  Photon
+using  IntegratedOptics
 λ = 1.55;
 Lx = 8 * λ; 
 Ly = 8 * λ;

@@ -1,4 +1,4 @@
-using Photon
+using IntegratedOptics
 ######################
 # Plot Options
 ϵ_axes = Axes(title = "'ϵᵣ'",xlabel = "'x'", ylabel = "'y'", palette = :tempo, auto = "fix",size =" ratio -1")
@@ -50,7 +50,7 @@ sim(HeatMap,:ϵᵣ,ẑ, axes = ϵ_axes)
 x_cut = 1.2
 sim_wg_in = sim(slice, x̂ , x_cut )
 eig_vals , eig_vecs = sim_wg_in(solve_for_modes,solver = EigArpack())
-mode_te_in = sim_wg_in(Photon.extractreshape, eig_vecs[:,1] ,x̂)
+mode_te_in = sim_wg_in(extractreshape, eig_vecs[:,1] ,x̂)
 #mode_tm_in = sim_wg(Photon.extractreshape, eig_vecs[:,2] ,ŷ)
 sim_wg_in(LinePlot,mode_te_in,lw = 2,title = "'mode profile'")
 input_mode_sim = deepcopy(sim)
@@ -67,7 +67,7 @@ input_mode_sim(HeatMap,:E,ẑ, axes = Ez_axes)
 x_cut = 1.2
 sim_wg_out_1 = sim(slice, x̂ , x_cut )
 eig_vals , eig_vecs = sim_wg_out_1(solve_for_modes,solver = EigArpack())
-mode_te_out_1 = sim_wg_out_1(Photon.extractreshape, eig_vecs[:,1] ,x̂)
+mode_te_out_1 = sim_wg_out_1(extractreshape, eig_vecs[:,1] ,x̂)
 #mode_tm_in = sim_wg(Photon.extractreshape, eig_vecs[:,2] ,ŷ)
 sim_wg_out_1(LinePlot,mode_te_out_1,lw = 2,title = "'mode profile'")
 output_1_mode_sim = deepcopy(sim)
@@ -84,7 +84,7 @@ output_1_mode_sim(HeatMap,:E,ẑ, axes = Ez_axes)
 y_cut = 1.9
 sim_wg_out_2 = sim(slice, ŷ , y_cut )
 eig_vals , eig_vecs = sim_wg_out_2(solve_for_modes)
-mode_te_out_2 = sim_wg_out_2(Photon.extractreshape, eig_vecs[:,3] ,x̂)
+mode_te_out_2 = sim_wg_out_2(extractreshape, eig_vecs[:,3] ,x̂)
 sim_wg_out_2(LinePlot,mode_te_out_2,lw = 2,title = "'mode profile'")
 output_2_mode_sim = deepcopy(sim)
 output_2_mode_sim(setbackground!,SiO2)
@@ -153,10 +153,10 @@ for i in 1:Nt
     trans_1 = real.(sim(:S,x̂,((x̂,4.5,4.5),(ŷ,3,3))))  
  
     println("iter:$(i)",": ",trans_1, " , ",trans_2 )
-    display(sim(HeatMap,  :ϵᵣ, ẑ,axes =ϵ_axes ))
-    sim(saveplot,output = "./plots/devices/ninety_bend/eps/eps_$(i).png")
-    display(sim(HeatMap,  :E, ẑ,axes =Ez_axes )) 
-    sim(saveplot,output = "./plots/devices/ninety_bend/Ez/Ez_$(i).png")
+   # display(sim(HeatMap,  :ϵᵣ, ẑ,axes =ϵ_axes ))
+  #  sim(saveplot,output = "./plots/devices/ninety_bend/eps/eps_$(i).png")
+ #   display(sim(HeatMap,  :E, ẑ,axes =Ez_axes )) 
+#    sim(saveplot,output = "./plots/devices/ninety_bend/Ez/Ez_$(i).png")
        ####
 end
 

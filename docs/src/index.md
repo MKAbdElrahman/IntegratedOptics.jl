@@ -1,28 +1,28 @@
 ```@meta
-CurrentModule = Photon
+CurrentModule = IntegratedOptics
 ```
 
 # Photon
 
-Documentation for [Photon](https://github.com/MKAbdElrahman/Photon.jl).
+Documentation for [IntegratedOptics](https://github.com/MKAbdElrahman/IntegratedOptics.jl).
 
 
 ## Getting Started: Installation And First Steps
 To install the package, use the following command inside the Julia REPL:
 ```julia
 using Pkg
-Pkg.add("https://github.com/MKAbdElrahman/Photon.jl")
+Pkg.add("https://github.com/MKAbdElrahman/IntegratedOptics.jl")
 ```
 
 To load the package, use the command:
 
 ```julia
-using Photon
+using IntegratedOptics
 ```
 ## Tutorials
 
 The following tutorials will introduce you to the functionality of
-Photon.jl.
+IntegratedOptics.jl.
 
 ```@contents
 Pages = [

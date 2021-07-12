@@ -1,4 +1,4 @@
-using Photon
+using IntegratedOptics
 ######################
 # Plot Options
 ϵ_axes = Axes(title = "'ϵᵣ'",xlabel = "'x'", ylabel = "'y'", palette = :tempo, auto = "fix",size =" ratio -1")
@@ -45,7 +45,7 @@ sim(HeatMap,:ϵᵣ,ẑ, axes = ϵ_axes)
 x_cut = 1.2
 sim_wg_in = sim(slice, x̂ , x_cut )
 eig_vals , eig_vecs = sim_wg_in(solve_for_modes,solver = EigArpack())
-mode_te_in = sim_wg_in(Photon.extractreshape, eig_vecs[:,1] ,x̂)
+mode_te_in = sim_wg_in(extractreshape, eig_vecs[:,1] ,x̂)
 #mode_tm_in = sim_wg(Photon.extractreshape, eig_vecs[:,2] ,ŷ)
 sim_wg_in(LinePlot,mode_te_in,lw = 2,title = "'mode profile'")
 input_mode_sim = deepcopy(sim)
@@ -62,7 +62,7 @@ input_mode_sim(HeatMap,:E,ẑ, axes = Ez_axes)
 y_cut = 1.9
 sim_wg_out = sim(slice, ŷ , y_cut )
 eig_vals , eig_vecs = sim_wg_out(solve_for_modes)
-mode_te_out = sim_wg_out(Photon.extractreshape, eig_vecs[:,1] ,x̂)
+mode_te_out = sim_wg_out(extractreshape, eig_vecs[:,1] ,x̂)
 sim_wg_out(LinePlot,mode_te_out,lw = 2,title = "'mode profile'")
 output_mode_sim = deepcopy(sim)
 output_mode_sim(setbackground!,SiO2)
@@ -114,8 +114,8 @@ for i in 1:Nt
     trans = sum(real.(sim(:S,ŷ,((x̂,2,4),(ŷ,2,2))))) / sum(real.(sim(:S,x̂,((x̂,2,2),(ŷ,2,4))))) 
     println("iter:$(i)",": ",trans)
     display(sim(HeatMap,  :ϵᵣ, ẑ,axes =ϵ_axes ))
-    sim(saveplot,output = "./plots/devices/ninety_bend/eps/eps_$(i).png")
-    display(sim(HeatMap,  :E, ẑ,axes =Ez_axes )) 
-    sim(saveplot,output = "./plots/devices/ninety_bend/Ez/Ez_$(i).png")
+    #sim(saveplot,output = "./plots/devices/ninety_bend/eps/eps_$(i).png")
+    #display(sim(HeatMap,  :E, ẑ,axes =Ez_axes )) 
+   # sim(saveplot,output = "./plots/devices/ninety_bend/Ez/Ez_$(i).png")
    ####
 end
