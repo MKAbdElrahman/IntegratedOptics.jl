@@ -2,7 +2,7 @@
 CurrentModule = IntegratedOptics
 ```
 
-# Photon
+# IntegratedOptics
 
 Documentation for [IntegratedOptics](https://github.com/MKAbdElrahman/IntegratedOptics.jl).
 

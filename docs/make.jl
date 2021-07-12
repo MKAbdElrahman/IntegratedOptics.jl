@@ -2,13 +2,13 @@ push!(LOAD_PATH,"../src/")
 using IntegratedOptics
 using Documenter
 
-DocMeta.setdocmeta!(Photon, :DocTestSetup, :(using IntegratedOptics); recursive=true)
+DocMeta.setdocmeta!(IntegratedOptics, :DocTestSetup, :(using IntegratedOptics); recursive=true)
 
 makedocs(;
-    modules=[Photon],
+    modules=[IntegratedOptics],
     authors="Mohamed Kamal AbdElrahman",
     repo="https://github.com/MKAbdElrahman/IntegratedOptics.jl/blob/{commit}{path}#{line}",
-    sitename="Photon.jl",
+    sitename="IntegratedOptics.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://MKAbdElrahman.github.io/IntegratedOptics.jl",
