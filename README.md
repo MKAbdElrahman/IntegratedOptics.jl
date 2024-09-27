@@ -1,4 +1,4 @@
-# IntegratedOptics.jl (UNDER DEVELOPMENT)
+# IntegratedOptics.jl (DEPRECATED)
 
 <!-- [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://MKAbdElrahman.github.io/IntegratedOptics.jl/stable) -->
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://MKAbdElrahman.github.io/IntegratedOptics.jl/dev)
